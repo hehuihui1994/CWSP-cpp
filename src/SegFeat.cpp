@@ -21,7 +21,7 @@ namespace cwsp
         delete _unigram;
         delete _bigram;
         delete _trigram;
-        delete _dict_feat;
+        // delete _dict_feat;
     }
     
     int Feat::GetUnigramIndex(const char *feat)
@@ -39,7 +39,7 @@ namespace cwsp
         return _trigram->GetIndex(feat);
     }
 
-    int Feat::GetDictInfo(const char *feat)
+    pair<int, char>Feat::GetDictInfo(const char *feat)
     {
         _Str2PairMapIter it = _dict_feat.find(feat);
 
@@ -74,17 +74,17 @@ namespace cwsp
 
     bool Feat::SaveFeatureFile()
     {
-        if( ( _unigram==NULL ) || (_unigram.size()<=0) )
+        if( ( _unigram==NULL ) || (_unigram->size()<=0) )
         {
             cerr<<"\nDoes not have any feature in Unigram."<<endl;
             return false;
         }
-        if( ( _bigram==NULL ) || (_bigram.size()<=0) )
+        if( ( _bigram==NULL ) || (_bigram->size()<=0) )
         {
             cerr<<"\nDoes not have any feature in Bigram."<<endl;
             return false;
         }
-        if( ( _trigram==NULL ) || (_trigram.size()<=0) )
+        if( ( _trigram==NULL ) || (_trigram->size()<=0) )
         {
             cerr<<"\nDoes not have any feature in Trigram."<<endl;
             return false;
@@ -99,31 +99,31 @@ namespace cwsp
         FeatureFile = fopen(FileName.c_str(), "w");
         
         // write unigram feature
-        string unigramSize = toString(_unigram.size()) + '\n';
+        string unigramSize = toString(_unigram->size()) + '\n';
         string unigramHeader = "#UnigramFeature\n"; 
         fwrite(unigramHeader.data(), unigramHeader.length(), 1, FeatureFile);
-        fwrite(unigramHSize.data(), unigramSize.length(), 1, FeatureFile);
+        fwrite(unigramSize.data(), unigramSize.length(), 1, FeatureFile);
         _unigram->WriteVocabText(FeatureFile);
 
         // write bigram feature
-        string bigramSize = toString(_bigram.size()) + '\n';
+        string bigramSize = toString(_bigram->size()) + '\n';
         string bigramHeader = "#BigramFeature\n"; 
         fwrite(bigramHeader.data(), bigramHeader.length(), 1, FeatureFile);
-        fwrite(bigramHSize.data(), bigramSize.length(), 1, FeatureFile);
+        fwrite(bigramSize.data(), bigramSize.length(), 1, FeatureFile);
         _bigram->WriteVocabText(FeatureFile);
 
         // write trigram feature
-        string trigramSize = toString(_trigram.size()) + '\n';
+        string trigramSize = toString(_trigram->size()) + '\n';
         string trigramHeader = "#TrigramFeature\n"; 
         fwrite(trigramHeader.data(), trigramHeader.length(), 1, FeatureFile);
-        fwrite(trigramHSize.data(), trigramSize.length(), 1, FeatureFile);
+        fwrite(trigramSize.data(), trigramSize.length(), 1, FeatureFile);
         _trigram->WriteVocabText(FeatureFile);
 
         fclose(FeatureFile);
         return true;
     }
 
-    bool ReadFile(const char* FileName)
+    bool Feat::ReadFile(const char* FileName)
     {
         ifstream fin;
         fin.open(FileName);
@@ -135,12 +135,12 @@ namespace cwsp
 
         string myTextLine;
         vector<string> tmp;
-        delete _unigram;
-        delete _bigram;
-        delete _trigram;
-        _bigram = new Vocab;
-        _unigram = new Vocab;
-        _trigram = new Vocab;
+        delete this->_unigram;
+        delete this->_bigram;
+        delete this->_trigram;
+        this->_bigram = new Vocab;
+        this->_unigram = new Vocab;
+        this->_trigram = new Vocab;
 
         getline(fin, myTextLine);  // skip the first line
 
@@ -153,7 +153,7 @@ namespace cwsp
             tmp = SplitString(myTextLine, " ");
             string feat = tmp.front();
             int index = fromString<int>(tmp.back());
-            _unigram->InserWordAndIndex(feat, index);
+            this->_unigram->InserWordAndIndex(feat, index);
         }
 
         getline(fin, myTextLine);
@@ -166,7 +166,7 @@ namespace cwsp
             tmp = SplitString(myTextLine, " ");
             string feat = tmp.front();
             int index = fromString<int>(tmp.back());
-            _bigram->InserWordAndIndex(feat, index);
+            this->_bigram->InserWordAndIndex(feat, index);
         }
 
         getline(fin, myTextLine);
@@ -179,16 +179,16 @@ namespace cwsp
             tmp = SplitString(myTextLine, " ");
             string feat = tmp.front();
             int index = fromString<int>(tmp.back());
-            _trigram->InserWordAndIndex(feat, index);
+            this->_trigram->InserWordAndIndex(feat, index);
         }
         fin.close();
-        std::cout<<"\nUnigram feature: "<<_unigram.size()<<endl
-                 <<"Bigram feature:  "<<_bigram.size()<<endl
-                 <<"Trigram feature: "<<_trigram.size()<<endl;
+        std::cout<<"\nUnigram feature: "<<this->_unigram->size()<<endl
+                 <<"Bigram feature:  "<<this->_bigram->size()<<endl
+                 <<"Trigram feature: "<<this->_trigram->size()<<endl;
         return true;
     }
 
-    bool ReadBinaryFile(const char* FileName)
+    bool Feat::ReadBinaryFile(const char* FileName)
     {
         FILE * FeatureFile;
         FeatureFile = fopen(FileName, "rb");
@@ -198,7 +198,7 @@ namespace cwsp
             return false;
         }
         char headBuf[UNIGRAM_LEN_MAX];
-        fread(&headBuf, g_Header_Len, 1, NgramFile);
+        fread(&headBuf, g_Header_Len, 1, FeatureFile);
         string header = string(headBuf, g_Header_Len);
 
         int unigramSize, bigramSize, trigramSize;
@@ -212,7 +212,7 @@ namespace cwsp
             fread((void*)&buf, unit, 1, FeatureFile);
             word = string(buf, unit);
             fread(&index, sizeof(int), 1, FeatureFile);
-            _unigram->InserWordAndIndex(word, index);
+            this->_unigram->InserWordAndIndex(word, index);
         }
 
         fread(&bigramSize, sizeof(int), 1, FeatureFile);
@@ -223,7 +223,7 @@ namespace cwsp
             fread((void*)&buf, unit, 1, FeatureFile);
             word = string(buf, unit);
             fread(&index, sizeof(int), 1, FeatureFile);
-            _bigram->InserWordAndIndex(word, index);
+            this->_bigram->InserWordAndIndex(word, index);
         }
 
         fread(&trigramSize, sizeof(int), 1, FeatureFile);
@@ -234,7 +234,7 @@ namespace cwsp
             fread((void*)&buf, unit, 1, FeatureFile);
             word = string(buf, unit);
             fread(&index, sizeof(int), 1, FeatureFile);
-            _trigram->InserWordAndIndex(word, index);
+            this->_trigram->InserWordAndIndex(word, index);
         }
         fclose(FeatureFile);
         return true;
@@ -242,7 +242,7 @@ namespace cwsp
 
     bool Feat::ConvertToBinaryFile(const char* InputFileName, const char* OutputFileName)
     {
-        if !(ReadFile(InputFileName)) return false;
+        if (!ReadFile(InputFileName)) return false;
         std::cout<<"Load text Feature file finished."<<endl;
         FILE* str_lm_file;
         FILE* bin_lm_file;
@@ -254,17 +254,17 @@ namespace cwsp
         }
         bin_lm_file=fopen(OutputFileName,"wb");
         fwrite(g_Model_Header.data(), g_Header_Len, 1, bin_lm_file);
-        int unigramSize = _unigram->size();
+        int unigramSize = this->_unigram->size();
         fwrite(&unigramSize, sizeof(int), 1, bin_lm_file);
-        _unigram->WriteVocabIndex(bin_lm_file);
+        this->_unigram->WriteVocabIndex(bin_lm_file);
 
-        int bigramSize = _bigram->size();
+        int bigramSize = this->_bigram->size();
         fwrite(&bigramSize, sizeof(int), 1, bin_lm_file);
-        _bigram->WriteVocabIndex(bin_lm_file);
+        this->_bigram->WriteVocabIndex(bin_lm_file);
 
-        int trigramSize = _trigram->size();
+        int trigramSize = this->_trigram->size();
         fwrite(&trigramSize, sizeof(int), 1, bin_lm_file);
-        _trigram->WriteVocabIndex(bin_lm_file);
+        this->_trigram->WriteVocabIndex(bin_lm_file);
 
         fclose(str_lm_file);
         fclose(bin_lm_file);

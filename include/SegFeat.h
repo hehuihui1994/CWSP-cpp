@@ -35,7 +35,7 @@ namespace cwsp
         }
         int DictLen()
         {
-            return _dict_feat_len;
+            return (int)_dict_feat_len;
         }
 
         bool InsertUnigramFeat(const char *feat);
@@ -53,10 +53,12 @@ namespace cwsp
         Vocab *_unigram;
         Vocab *_bigram;
         Vocab *_trigram;
-        map<string, pair<int, char>> _dict_feat;
-        int _dict_feat_len;
-        typedef map<string, pair<int, char>>::iterator _Str2PairMapIter;
+        map<string, pair<int, char> > _dict_feat;
+        size_t _dict_feat_len;
+        typedef map<string, pair<int, char> >::iterator _Str2PairMapIter;
 
         bool _modifiable;    // if _modifiable is "false", you cannot insert, load from file...
     };
 }
+
+#endif

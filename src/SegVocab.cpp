@@ -5,7 +5,7 @@
 
 #include "SegVocab.h"
 
-namespace Urheen
+namespace cwsp
 {
     int Vocab::ParseEngWords(char* sentence, char** words, int max)
     {

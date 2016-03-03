@@ -31,7 +31,7 @@ namespace cwsp
         line.erase(line.find_last_not_of(" \t\r\n")+1); 
     }
 
-    vector<string> SplitString(string term_str, string split_tag)
+    vector<string> SplitString(string terms_str, string spliting_tag)
     {
         vector<string> feat_vec;
         size_t term_beg_pos = 0;
