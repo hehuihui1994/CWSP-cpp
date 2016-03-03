@@ -1,0 +1,24 @@
+#UnigramFeature
+7
+</s> 3
+<s> 2
+<unk> 1
+NULL 0
+何 4
+声 5
+欢 6
+#BigramFeature
+6
+</s> 3
+<s> 2
+<unk> 1
+NULL 0
+何声 4
+声欢 5
+#TrigramFeature
+5
+</s> 3
+<s> 2
+<unk> 1
+NULL 0
+何声欢 4

@@ -121,7 +121,7 @@ namespace cwsp
         map<string, int>::iterator iter;
         for (iter = index_data.begin(); iter != index_data.end(); ++iter)
         {
-            string myWord = (*iter).first + toString((*iter).second) + '\n';
+            string myWord = (*iter).first + " "+ toString((*iter).second) + '\n';
             fwrite(myWord.data(), myWord.length(), 1, file);
         }
         return true;

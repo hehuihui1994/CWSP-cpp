@@ -7,7 +7,7 @@
 #define SEGFEAT_H_
 
 #include "Config.h"
-#include "StrFun.h"
+// #include "StrFun.h"
 #include "SegVocab.h"
 
 namespace cwsp
@@ -49,6 +49,8 @@ namespace cwsp
     private:
         bool ReadFile(const char* FileName);
         bool ReadBinaryFile(const char* FileName);
+        void TrimLine(string & line);
+        vector<string> SplitString(string terms_str, string spliting_tag);
     private:
         Vocab *_unigram;
         Vocab *_bigram;

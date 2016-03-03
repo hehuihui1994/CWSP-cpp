@@ -35,9 +35,11 @@ namespace cwsp
 		}; 
 
 		void InserWordAndIndex(string word, int index)
-		{
+		{	
+			if ((word == g_Vocab_NULL) || (word == g_Vocab_Unknown) || (word == g_Vocab_SentStart) || (word == g_Vocab_SentEnd)) return;
 			vocab_data.insert(map<int, string>::value_type( index, word ) );
 			index_data.insert(map<string, int>::value_type( word, index) );
+			_VocabSize++;
 		}
 
 		int GetIndex( const char *word )

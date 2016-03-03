@@ -9,9 +9,9 @@ namespace cwsp
 {
     Feat::Feat()
     {
-        _unigram = NULL;
-        _bigram = NULL;
-        _trigram = NULL;
+        _unigram = new Vocab;
+        _bigram = new Vocab;
+        _trigram = new Vocab;
         _dict_feat_len = _dict_feat.size();
         _modifiable = true;
     }
@@ -143,7 +143,6 @@ namespace cwsp
         this->_trigram = new Vocab;
 
         getline(fin, myTextLine);  // skip the first line
-
         getline(fin, myTextLine);
         int unigramSize = fromString<int>(myTextLine);
         for(int i=0; i<unigramSize; i++)
@@ -269,5 +268,30 @@ namespace cwsp
         fclose(str_lm_file);
         fclose(bin_lm_file);
         return true;
+    }
+
+    void Feat::TrimLine(string & line)
+    {
+        line.erase(0,line.find_first_not_of(" \t\r\n"));
+        line.erase(line.find_last_not_of(" \t\r\n")+1); 
+    }
+
+    vector<string> Feat::SplitString(string terms_str, string spliting_tag)
+    {
+        vector<string> feat_vec;
+        size_t term_beg_pos = 0;
+        size_t term_end_pos = 0;
+        while ((term_end_pos = terms_str.find_first_of(spliting_tag, term_beg_pos)) != string::npos) {
+            if (term_end_pos > term_beg_pos) {
+                string term_str = terms_str.substr(term_beg_pos, term_end_pos - term_beg_pos);
+                feat_vec.push_back(term_str);
+            }
+            term_beg_pos = term_end_pos + 1;
+        }
+        if (term_beg_pos < terms_str.size()) {
+            string end_str = terms_str.substr(term_beg_pos);
+            feat_vec.push_back(end_str);
+        }
+        return feat_vec;
     }
 }
