@@ -7,6 +7,7 @@
 #define SEGFEAT_H_
 
 #include "Config.h"
+#include "StrFun.h"
 #include "SegVocab.h"
 
 namespace cwsp
@@ -16,32 +17,46 @@ namespace cwsp
     public:
         Feat();
         ~Feat();
-        int GetUnigramIndics(const char *feat);  //get unigram feat's index
-        int GetBigramIndics(const char *feat);   //get bigram feat's index
-        int GetTrigramIndics(const char *feat);  //get trigram feat's index
-        int GetUnigramLen()
+        int GetUnigramIndex(const char *feat);  // get unigram feat's index
+        int GetBigramIndex(const char *feat);   // get bigram feat's index
+        int GetTrigramIndex(const char *feat);  // get trigram feat's index
+        pair<int, char> GetDictInfo(const char *feat);       // get dictionary feat info
+        int UnigramLen()
         {
             return _unigram->size();
         }
-        int GetBigramLen()
+        int BigramLen()
         {
             return _bigram->size();
         }
-        int GetTrigramLen()
+        int TrigramLen()
         {
             return _trigram->size();
         }
+        int DictLen()
+        {
+            return _dict_feat_len;
+        }
 
-        void InsertUnigramFeat(const char *feat);
-        void InsertBigramFeat(const char *feat);
-        void InsertTrigramFeat(const char *feat);
+        bool InsertUnigramFeat(const char *feat);
+        bool InsertBigramFeat(const char *feat);
+        bool InsertTrigramFeat(const char *feat);
+
+        bool LoadFeatureFile(const char *UnigramFileName);
+        bool SaveFeatureFile();
+        bool ConvertToBinaryFile(const char* InputFileName, const char* OutputFileName);
+
+    private:
+        bool ReadFile(const char* FileName);
+        bool ReadBinaryFile(const char* FileName);
     private:
         Vocab *_unigram;
         Vocab *_bigram;
         Vocab *_trigram;
         map<string, pair<int, char>> _dict_feat;
+        int _dict_feat_len;
         typedef map<string, pair<int, char>>::iterator _Str2PairMapIter;
 
-        bool _modifiable;
+        bool _modifiable;    // if _modifiable is "false", you cannot insert, load from file...
     };
 }

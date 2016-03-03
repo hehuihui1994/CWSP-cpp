@@ -7,6 +7,7 @@
 #define SEG_VOCAB_H_
 
 #include "Config.h"
+#include "StrFun.h"
 
 namespace cwsp
 {
@@ -76,6 +77,7 @@ namespace cwsp
 		 int& SenEnd(){ return _ulSenEnd; };         //返回</s>的词号
 
 		 bool WriteVocabIndex(FILE * file);
+		 bool WriteVocabText(FILE * file);
 
 	private:
 		int Insert(string word)         //将单词插入到单词表中，并返回词号
