@@ -57,6 +57,9 @@ namespace cwsp
     const int WORD_LEN_MAX = 100;
     const int MAX_SEG_STATE_NUM = 20;
     const int MAX_POS_STATE_NUM = 30;
+
+    const int g_tagIdLbound = 0;
+    const int g_tagIdRbound = 3;
 }
 
 #endif
