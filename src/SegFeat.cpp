@@ -200,6 +200,13 @@ namespace cwsp
         fread(&headBuf, g_Header_Len, 1, FeatureFile);
         string header = string(headBuf, g_Header_Len);
 
+		delete this->_unigram;
+        delete this->_bigram;
+        delete this->_trigram;
+        this->_bigram = new Vocab;
+        this->_unigram = new Vocab;
+        this->_trigram = new Vocab;
+
         int unigramSize, bigramSize, trigramSize;
         fread(&unigramSize, sizeof(int), 1, FeatureFile);
         int index, unit;

@@ -30,6 +30,8 @@ namespace cwsp
     private:
         bool ReadFile(const char *FileName);
         bool ReadBinaryFile(const char *FileName);
+		void TrimLine(string & line);
+		vector<string> SplitString(string terms_str, string spliting_tag);
     private:
         vector<double> *_init_prob;
         vector< vector<double> > *_trans_prob;

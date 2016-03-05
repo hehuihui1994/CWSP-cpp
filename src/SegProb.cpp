@@ -128,7 +128,25 @@ namespace cwsp
 
     bool SegProb::LoadProbFile(const char *FileName)
     {
-
+		FILE * ProbFile;
+		ProbFile = fopen(FileName, "rb");
+		if (!ProbFile)
+		{
+			cerr<<"\nCan not open the Probability info file: "<<FileName<<endl;
+			return false;
+		}
+		char headBuf[UNIGRAM_LEN_MAX];
+		fread(&headBuf, g_Header_Len, 1, ProbFile);
+		fclose(ProbFile);
+		string header = string(headBuf, g_Header_Len);
+		if (header == g_Model_Header)
+		{
+			return ReadBinaryFile(FileName);
+		}
+		else
+		{
+			return ReadFile(FileName);
+		}
     }
 
     bool SegProb::SaveProbFile()
@@ -143,6 +161,7 @@ namespace cwsp
 #else
         string _datapath = "model/";
 #endif
+		std::cout<<"file path: "<<_datapath<<endl;
         string FileName = _datapath + "Prob";
         FILE * ProbFile;
         ProbFile = fopen(FileName.c_str(), "w");
@@ -180,16 +199,163 @@ namespace cwsp
 
     bool SegProb::ConvertToBinaryFile(const char* InputFileName, const char* OutputFileName)
     {
+		if (!ReadFile(InputFileName)) return false;
+        std::cout<<"Load text Probability file finished."<<endl;
+        FILE* str_lm_file;
+        FILE* bin_lm_file;
+        str_lm_file=fopen(InputFileName,"r");
+        if( !str_lm_file )
+        {
+            cerr<<"Can not open the Language Model File: "<<InputFileName<<endl;
+            return false;
+        }
+        bin_lm_file=fopen(OutputFileName,"wb");
+        fwrite(g_Model_Header.data(), g_Header_Len, 1, bin_lm_file);
+        int initProbSzie = (int)this->_init_prob->size();
+        fwrite(&initProbSzie, sizeof(int), 1, bin_lm_file);
+        for(int i=0; i<4; i++)
+		{
+			fwrite(&this->_init_prob->at(i), sizeof(double), 1, bin_lm_file);
+		}
 
+        int transProbSize = (int)this->_trans_prob->size();
+        fwrite(&transProbSize, sizeof(int), 1, bin_lm_file);
+		for(int i=0; i<4; i++)
+		{
+			for(int j=0; j<4; j++)
+			{
+				fwrite(&this->_trans_prob->at(i).at(j), sizeof(double), 1, bin_lm_file);
+			}
+		}
+        fclose(str_lm_file);
+        fclose(bin_lm_file);
+		std::cout<<"Convert to binary file finished!"<<endl;
+        return true;
     }
 
     bool SegProb::ReadFile(const char *FileName)
     {
+		ifstream fin;
+        fin.open(FileName);
+        if( !fin.is_open() )
+        {
+            cerr<<"\nCan not open the Probability info file: "<<FileName<<endl;
+            return false;
+        }
 
+        string myTextLine;
+        vector<string> tmp;
+        delete this->_init_prob;
+		delete this->_trans_prob;
+        this->_init_prob = new vector<double>;
+        this-> _trans_prob = new vector< vector<double> >;
+
+        getline(fin, myTextLine);  // skip the first line
+        for(int i=0; i<4; i++)
+        {
+            getline(fin, myTextLine);
+            TrimLine(myTextLine);
+			double prob;
+			if (myTextLine != "-Inf")
+			{
+				prob = fromString<double>(myTextLine);
+				this->_init_prob->push_back(prob);
+			}
+			else
+			{
+				this->_init_prob->push_back(LogP_Zero);
+			}
+        }
+
+        getline(fin, myTextLine);
+        //int bigramSize = fromString<int>(myTextLine);
+        for(int i=0; i<4; i++)
+        {
+            getline(fin, myTextLine);
+            TrimLine(myTextLine);
+            tmp = SplitString(myTextLine, " ");
+			vector<double> probs;
+			for(int j=0; j<4; j++)
+			{
+				if (tmp[j] != "-Inf")
+				{
+					double prob = fromString<double>(tmp[j]);
+					probs.push_back(prob);
+				}
+				else
+				{
+					probs.push_back(LogP_Zero);
+				}
+			}
+            //int index = fromString<int>(tmp.back());
+			this->_trans_prob->push_back(probs);
+        }
+        return true;
     }
 
     bool SegProb::ReadBinaryFile(const char *FileName)
     {
+		FILE * probFile;
+        probFile = fopen(FileName, "rb");
+        if( !probFile )
+        {
+            cerr<<"\nCan not open the Probability info file: "<<FileName<<endl;
+            return false;
+        }
+        char headBuf[UNIGRAM_LEN_MAX];
+        fread(&headBuf, g_Header_Len, 1, probFile);
+        string header = string(headBuf, g_Header_Len);
+		delete this->_init_prob;
+		delete this->_trans_prob;
+        this->_init_prob = new vector<double>;
+        this-> _trans_prob = new vector< vector<double> >;
 
+		int initProbSize, transProbSize;
+		fread(&initProbSize, sizeof(int), 1, probFile);
+		for(int i=0; i<4; i++)
+		{
+			double prob;
+			fread(&prob, sizeof(double), 1,probFile);
+			this->_init_prob->push_back(prob);
+		}
+
+		fread(&transProbSize, sizeof(int), 1, probFile);
+		for(int i=0; i<4; i++)
+		{
+			vector<double> probs;
+			for(int j=0; j<4; j++)
+			{
+				double prob;
+				fread(&prob, sizeof(double), 1,probFile);
+				probs.push_back(prob);
+			}
+			this->_trans_prob->push_back(probs);
+		}
+		return true;
+    }
+
+	void SegProb::TrimLine(string & line)
+    {
+        line.erase(0,line.find_first_not_of(" \t\r\n"));
+        line.erase(line.find_last_not_of(" \t\r\n")+1); 
+    }
+
+    vector<string> SegProb::SplitString(string terms_str, string spliting_tag)
+    {
+        vector<string> feat_vec;
+        size_t term_beg_pos = 0;
+        size_t term_end_pos = 0;
+        while ((term_end_pos = terms_str.find_first_of(spliting_tag, term_beg_pos)) != string::npos) {
+            if (term_end_pos > term_beg_pos) {
+                string term_str = terms_str.substr(term_beg_pos, term_end_pos - term_beg_pos);
+                feat_vec.push_back(term_str);
+            }
+            term_beg_pos = term_end_pos + 1;
+        }
+        if (term_beg_pos < terms_str.size()) {
+            string end_str = terms_str.substr(term_beg_pos);
+            feat_vec.push_back(end_str);
+        }
+        return feat_vec;
     }
 }
