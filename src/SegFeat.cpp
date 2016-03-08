@@ -108,6 +108,13 @@ namespace cwsp
         fwrite(trigramSize.data(), trigramSize.length(), 1, FeatureFile);
         _trigram->WriteVocabText(FeatureFile);
 
+        // write dict feature
+        string dictSize = toString(_dict->size()) + '\n';
+        string dictHeader = "#DictFeature\n"; 
+        fwrite(dictHeader.data(), dictHeader.length(), 1, FeatureFile);
+        fwrite(dictSize.data(), dictSize.length(), 1, FeatureFile);
+        _dict->WriteVocabText(FeatureFile);
+
         fclose(FeatureFile);
         return true;
     }
@@ -169,6 +176,19 @@ namespace cwsp
             int index = fromString<int>(tmp.back());
             this->_trigram->InserWordAndIndex(feat, index);
         }
+
+        getline(fin, myTextLine);
+        getline(fin, myTextLine);
+        int dictSize = fromString<int>(myTextLine);
+        for(int i=0; i<dictSize; i++)
+        {
+            getline(fin, myTextLine);
+            TrimLine(myTextLine);
+            tmp = SplitString(myTextLine, " ");
+            string feat = tmp.front();
+            int index = fromString<int>(tmp.back());
+            this->_dict->InserWordAndIndex(feat, index);
+        }
         fin.close();
         return true;
     }
@@ -193,7 +213,7 @@ namespace cwsp
         this->_unigram = new Vocab;
         this->_trigram = new Vocab;
 
-        int unigramSize, bigramSize, trigramSize;
+        int unigramSize, bigramSize, trigramSize, dictSize;
         fread(&unigramSize, sizeof(int), 1, FeatureFile);
         int index, unit;
         string word;
@@ -228,6 +248,17 @@ namespace cwsp
             fread(&index, sizeof(int), 1, FeatureFile);
             this->_trigram->InserWordAndIndex(word, index);
         }
+
+        fread(&dictSize, sizeof(int), 1, FeatureFile);
+        for (int i=0; i<dictSize; i++)
+        {
+            fread(&unit, sizeof(int), 1, FeatureFile);
+            char buf[UNIGRAM_LEN_MAX];
+            fread((void*)&buf, unit, 1, FeatureFile);
+            word = string(buf, unit);
+            fread(&index, sizeof(int), 1, FeatureFile);
+            this->_dict->InserWordAndIndex(word, index);
+        }
         fclose(FeatureFile);
         return true;
     }
@@ -257,6 +288,10 @@ namespace cwsp
         int trigramSize = this->_trigram->size();
         fwrite(&trigramSize, sizeof(int), 1, bin_lm_file);
         this->_trigram->WriteVocabIndex(bin_lm_file);
+
+        int dictSize = this->_dict->size();
+        fwrite(&dictSize, sizeof(int), 1, bin_lm_file);
+        this->_dict->WriteVocabIndex(bin_lm_file);
 
         fclose(str_lm_file);
         fclose(bin_lm_file);
