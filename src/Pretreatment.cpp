@@ -11,13 +11,27 @@ namespace cwsp
     {
         _features = new SegFeat;
         _probs = new SegProb;
+		_dict = new SegDict;
+		_char_type = new CharType;
     }
 
     Pretreatment::~Pretreatment()
     {
         delete _features;
         delete _probs;
+		delete _dict;
+		delete _char_type;
     }
+
+	bool Pretreatment::LoadDictFile(const char * DictFileName)
+	{
+		return _dict->LoadDictFile(DictFileName);
+	}
+
+	bool Pretreatment::LoadCharFile(bool is_bin)
+	{
+		return _char_type->Initialize(is_bin);
+	}
 
     bool Pretreatment::TrainSegFile(const char * FileName)
     {
@@ -26,7 +40,7 @@ namespace cwsp
         if (!fin.is_open())
         {
             cerr << "###########################################" << endl;
-            cerr << "Open " << inputfile << " error!" << endl;
+            cerr << "Open " << FileName<< " error!" << endl;
             cerr << "###########################################" << endl;
             return false;
         }
@@ -93,4 +107,58 @@ namespace cwsp
         tagVec.push_back("E_1");
         return;
     }
+
+	void Pretreatment::GenerateFeats(vector<string> charVec, vector<string> tagVec, vector<vector<string> > &featsVec)
+	{
+		featsVec.clear();
+		for (size_t i = 2; i<charVec.size()-2;i++)
+		{
+			vector<string> feat;
+			string feature;
+
+			// C-2
+			feature = "" + charVec.at(i-2);
+			feat.push_back(feature);
+			// C-1
+			feature = "" + charVec.at(i-1);
+			feat.push_back(feature);
+			// C0
+			feature = "" + charVec.at(i);
+			feat.push_back(feature);
+			// C1
+			feature = "" + charVec.at(i+1);
+			feat.push_back(feature);
+			// C2
+			feature = "" + charVec.at(i+2);
+			feat.push_back(feature);
+
+			// C-2C-1
+			feature = "" + charVec.at(i-2) + charVec.at(i-1);
+			feat.push_back(feature);
+			// C-1C0
+			feature = "" + charVec.at(i-1) + charVec.at(i);
+			feat.push_back(feature);
+			// C0C1
+			feature = "" + charVec.at(i) + charVec.at(i+1);
+			feat.push_back(feature);
+			// C1C2
+			feature = "" + charVec.at(i+1) + charVec.at(i+2);
+			feat.push_back(feature);
+
+			// C-1C1
+			feature = "" + charVec.at(i-1) + charVec.at(i+1);
+			feat.push_back(feature);
+
+			/* dict features */
+			//get MWL, t0
+			pair<int, string> ans = _dict->GetDictInfo(charVec.at(i).c_str());
+			/*
+			those dict features
+			*/
+
+			/* type features */
+			
+			featsVec.push_back(feat);
+		}
+	}
 }

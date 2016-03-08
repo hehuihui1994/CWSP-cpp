@@ -6,15 +6,15 @@
 #include <string>
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
-    /* SegDict test */
+    /* SegDict test 
     cout<<"SegDict test\n";
     cwsp::SegDict dict("data/Dict");
     pair<int, string> ans;
     ans = dict.GetDictInfo(" ");
     cout<<"  "<<ans.first<<" "<<ans.second<<endl;
-    dict.SaveDictFile();
+    dict.SaveDictFile();*/
 
     /* SegFeat test
     cout<<"SegFeat test"<<endl;
@@ -52,10 +52,11 @@ int main()
     testFeat1.SaveFeatureFile();*/
 
 
-    /* SegProb test
+    /* SegProb test*/
     cout<<"SegProb Test:"<<endl;
     cwsp::SegProb testProb;
-	testProb.LoadProbFile("model/Prob");
+	string file = argv[1];
+	testProb.LoadProbFile(file.c_str());
     // testProb.CalcAllProb();
 
 	for(int i=0;i<4;i++)
@@ -72,6 +73,7 @@ int main()
         }
         cout<<endl;
     }
+	/*
     // testProb.SaveProbFile();
 	testProb.ConvertToBinaryFile("model/Prob","data/Prob.bin");
 	cwsp::SegProb testProb1;
@@ -89,6 +91,7 @@ int main()
             cout<<testProb1.GetTransProb(i,j)<<" ";
         }
         cout<<endl;
-    }*/
+    }
+	*/
 	return 1;
 }

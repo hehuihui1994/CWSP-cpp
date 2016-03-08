@@ -10,6 +10,7 @@
 #include "CharType.h"
 #include "SegFeat.h"
 #include "SegProb.h"
+#include "SegDict.h"
 
 namespace cwsp
 {
@@ -18,6 +19,8 @@ namespace cwsp
     public:
         Pretreatment();
         ~Pretreatment();
+		bool LoadDictFile(const char * DictFileName);
+		bool LoadCharFile(bool is_bin);
         bool TrainSegFile(const char * FileName);
         bool SaveFeatureFile()
         {
@@ -31,12 +34,13 @@ namespace cwsp
     private:
         // This function processes strings like "我 爱 北京 天安门 。"
         void SplitLine(string &line, vector<string> &charVec, vector<string> &tagVec);
+		void GenerateFeats(vector<string> charVec, vector<string> tagVec, vector<vector<string> > &featsVec);
     private:
         SegFeat *_features;
         SegProb *_probs;
-        // CharType *_type_feats;
+		SegDict *_dict;
+        CharType *_char_type;
     };
 }
-
 
 #endif
