@@ -24,6 +24,8 @@ namespace cwsp
         is >> t;
         return t;
     }
+
+    void TrimLine(string & line);
 }
 
 #endif

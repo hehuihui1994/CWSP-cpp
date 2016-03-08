@@ -161,7 +161,6 @@ namespace cwsp
 #else
         string _datapath = "model/";
 #endif
-		std::cout<<"file path: "<<_datapath<<endl;
         string FileName = _datapath + "Prob";
         FILE * ProbFile;
         ProbFile = fopen(FileName.c_str(), "w");
@@ -273,20 +272,32 @@ namespace cwsp
         {
             getline(fin, myTextLine);
             TrimLine(myTextLine);
-            tmp = SplitString(myTextLine, " ");
-			vector<double> probs;
-			for(int j=0; j<4; j++)
-			{
-				if (tmp[j] != "-Inf")
-				{
-					double prob = fromString<double>(tmp[j]);
-					probs.push_back(prob);
-				}
-				else
-				{
-					probs.push_back(LogP_Zero);
-				}
-			}
+            istringstream is(myTextLine.c_str());
+            string tmp;
+            vector<double> probs;
+            while(is >> tmp){
+                if (tmp != "-Inf" && tmp != "-inf")
+                {
+                    double prob = fromString<double>(tmp);
+                    probs.push_back(prob);
+                }
+                else
+                    probs.push_back(LogP_Zero);
+            }
+            // tmp = SplitString(myTextLine, " ");
+			
+			// for(int j=0; j<4; j++)
+			// {
+			// 	if (tmp[j] != "-Inf")
+			// 	{
+			// 		double prob = fromString<double>(tmp[j]);
+			// 		probs.push_back(prob);
+			// 	}
+			// 	else
+			// 	{
+			// 		probs.push_back(LogP_Zero);
+			// 	}
+			// }
             //int index = fromString<int>(tmp.back());
 			this->_trans_prob->push_back(probs);
         }
@@ -332,30 +343,5 @@ namespace cwsp
 			this->_trans_prob->push_back(probs);
 		}
 		return true;
-    }
-
-	void SegProb::TrimLine(string & line)
-    {
-        line.erase(0,line.find_first_not_of(" \t\r\n"));
-        line.erase(line.find_last_not_of(" \t\r\n")+1); 
-    }
-
-    vector<string> SegProb::SplitString(string terms_str, string spliting_tag)
-    {
-        vector<string> feat_vec;
-        size_t term_beg_pos = 0;
-        size_t term_end_pos = 0;
-        while ((term_end_pos = terms_str.find_first_of(spliting_tag, term_beg_pos)) != string::npos) {
-            if (term_end_pos > term_beg_pos) {
-                string term_str = terms_str.substr(term_beg_pos, term_end_pos - term_beg_pos);
-                feat_vec.push_back(term_str);
-            }
-            term_beg_pos = term_end_pos + 1;
-        }
-        if (term_beg_pos < terms_str.size()) {
-            string end_str = terms_str.substr(term_beg_pos);
-            feat_vec.push_back(end_str);
-        }
-        return feat_vec;
     }
 }

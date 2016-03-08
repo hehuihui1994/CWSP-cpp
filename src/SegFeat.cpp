@@ -7,16 +7,15 @@
 
 namespace cwsp
 {
-    Feat::Feat()
+    SegFeat::SegFeat()
     {
         _unigram = new Vocab;
         _bigram = new Vocab;
         _trigram = new Vocab;
-        _dict_feat_len = _dict_feat.size();
         _modifiable = true;
     }
     
-    Feat::~Feat()
+    SegFeat::~SegFeat()
     {
         delete _unigram;
         delete _bigram;
@@ -24,32 +23,22 @@ namespace cwsp
         // delete _dict_feat;
     }
     
-    int Feat::GetUnigramIndex(const char *feat)
+    int SegFeat::GetUnigramIndex(const char *feat)
     {
         return _unigram->GetIndex(feat);
     }
 
-    int Feat::GetBigramIndex(const char *feat)
+    int SegFeat::GetBigramIndex(const char *feat)
     {
         return _bigram->GetIndex(feat);
     }
 
-    int Feat::GetTrigramIndex(const char *feat)
+    int SegFeat::GetTrigramIndex(const char *feat)
     {
         return _trigram->GetIndex(feat);
     }
 
-    pair<int, char>Feat::GetDictInfo(const char *feat)
-    {
-        _Str2PairMapIter it = _dict_feat.find(feat);
-
-        if( it != _dict_feat.end() )
-            return (*it).second;
-        else
-            return make_pair(1, 'S');
-    }
-
-    bool Feat::LoadFeatureFile(const char *FeatureFileName)
+    bool SegFeat::LoadFeatureFile(const char *FeatureFileName)
     {
         FILE * FeatureFile;
         FeatureFile = fopen(FeatureFileName, "rb");
@@ -72,7 +61,7 @@ namespace cwsp
         }
     }
 
-    bool Feat::SaveFeatureFile()
+    bool SegFeat::SaveFeatureFile()
     {
         if( ( _unigram==NULL ) || (_unigram->size()<=0) )
         {
@@ -123,7 +112,7 @@ namespace cwsp
         return true;
     }
 
-    bool Feat::ReadFile(const char* FileName)
+    bool SegFeat::ReadFile(const char* FileName)
     {
         ifstream fin;
         fin.open(FileName);
@@ -181,13 +170,10 @@ namespace cwsp
             this->_trigram->InserWordAndIndex(feat, index);
         }
         fin.close();
-        std::cout<<"\nUnigram feature: "<<this->_unigram->size()<<endl
-                 <<"Bigram feature:  "<<this->_bigram->size()<<endl
-                 <<"Trigram feature: "<<this->_trigram->size()<<endl;
         return true;
     }
 
-    bool Feat::ReadBinaryFile(const char* FileName)
+    bool SegFeat::ReadBinaryFile(const char* FileName)
     {
         FILE * FeatureFile;
         FeatureFile = fopen(FileName, "rb");
@@ -246,7 +232,7 @@ namespace cwsp
         return true;
     }
 
-    bool Feat::ConvertToBinaryFile(const char* InputFileName, const char* OutputFileName)
+    bool SegFeat::ConvertToBinaryFile(const char* InputFileName, const char* OutputFileName)
     {
         if (!ReadFile(InputFileName)) return false;
         std::cout<<"Load text Feature file finished."<<endl;
@@ -277,13 +263,7 @@ namespace cwsp
         return true;
     }
 
-    void Feat::TrimLine(string & line)
-    {
-        line.erase(0,line.find_first_not_of(" \t\r\n"));
-        line.erase(line.find_last_not_of(" \t\r\n")+1); 
-    }
-
-    vector<string> Feat::SplitString(string terms_str, string spliting_tag)
+    vector<string> SegFeat::SplitString(string terms_str, string spliting_tag)
     {
         vector<string> feat_vec;
         size_t term_beg_pos = 0;

@@ -84,10 +84,10 @@ namespace cwsp
 	private:
 		int Insert(string word)         //将单词插入到单词表中，并返回词号
 		{
+			_VocabSize++;
 			vocab_data.insert(map<int, string>::value_type( _VocabSize, word ) );
 			index_data.insert(map<string, int>::value_type( word, _VocabSize ) );
-			_VocabSize++;
-			return _VocabSize-1;
+			return _VocabSize;
 		};
 
 		int _VocabSize;					//单词表的大小
