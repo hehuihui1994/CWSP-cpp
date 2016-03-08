@@ -1,47 +1,61 @@
 #include "SegFeat.h"
 #include "SegVocab.h"
 #include "SegProb.h"
+#include "SegDict.h"
+#include "Config.h"
 #include <string>
 using namespace std;
 
 int main()
 {
+    /* SegDict test */
+    cout<<"SegDict test\n";
+    cwsp::SegDict dict("data/Dict");
+    pair<int, string> ans;
+    ans = dict.GetDictInfo(" ");
+    cout<<"  "<<ans.first<<" "<<ans.second<<endl;
+    dict.SaveDictFile();
+
     /* SegFeat test
-    std::cout<<"test"<<endl;
-    cwsp::Feat testFeat;
+    cout<<"SegFeat test"<<endl;
+    cwsp::SegFeat testFeat;
     std::cout<<testFeat.UnigramLen()<<endl;
     std::cout<<testFeat.BigramLen()<<endl;
     std::cout<<testFeat.TrigramLen()<<endl;
 
-    string filename = "data\\Feature";
+    string filename = "data/Feature";
     testFeat.LoadFeatureFile(filename.c_str());
+    cout<<"After loading:"<<endl;
     std::cout<<testFeat.UnigramLen()<<endl;
     std::cout<<testFeat.BigramLen()<<endl;
     std::cout<<testFeat.TrigramLen()<<endl;
     testFeat.SaveFeatureFile();
 
     std::cout<<"test convert"<<endl;
-    filename = "model\\Feature";
-    string out = "data\\outtest";
+    filename = "model/Feature";
+    string out = "data/outtest";
+    cout<<"CONVERTING..."<<endl;
     testFeat.ConvertToBinaryFile(filename.c_str(), out.c_str());
+    cout<<"Finished."<<endl;
 
-    cwsp::Feat testFeat1;
+    cwsp::SegFeat testFeat1;
+    cout<<"another test case:"<<endl;
     std::cout<<testFeat1.UnigramLen()<<endl;
     std::cout<<testFeat1.BigramLen()<<endl;
     std::cout<<testFeat1.TrigramLen()<<endl;
 
     testFeat1.LoadFeatureFile(out.c_str());
+    cout<<"After load binary file:"<<endl;
     std::cout<<testFeat1.UnigramLen()<<endl;
     std::cout<<testFeat1.BigramLen()<<endl;
     std::cout<<testFeat1.TrigramLen()<<endl;
-    testFeat1.SaveFeatureFile();
-	*/
+    testFeat1.SaveFeatureFile();*/
 
 
-    /* SegProb test*/
+    /* SegProb test
     cout<<"SegProb Test:"<<endl;
     cwsp::SegProb testProb;
-	testProb.LoadProbFile("model\\Prob");
+	testProb.LoadProbFile("model/Prob");
     // testProb.CalcAllProb();
 
 	for(int i=0;i<4;i++)
@@ -59,9 +73,9 @@ int main()
         cout<<endl;
     }
     // testProb.SaveProbFile();
-	testProb.ConvertToBinaryFile("model\\Prob","data\\Prob.bin");
+	testProb.ConvertToBinaryFile("model/Prob","data/Prob.bin");
 	cwsp::SegProb testProb1;
-	testProb1.LoadProbFile("data\\Prob.bin");
+	testProb1.LoadProbFile("data/Prob.bin");
 	for(int i=0;i<4;i++)
     {
 		cout<<testProb1.GetInitProb(i);
@@ -75,6 +89,6 @@ int main()
             cout<<testProb1.GetTransProb(i,j)<<" ";
         }
         cout<<endl;
-    }
+    }*/
 	return 1;
 }
