@@ -38,10 +38,10 @@ namespace cwsp
             return _dict->size();
         }
 
-        bool InsertUnigramFeat(const char *feat);
-        bool InsertBigramFeat(const char *feat);
-        bool InsertTrigramFeat(const char *feat);
-        bool InsertDictFeat(const char *feat);
+        int InsertUnigramFeat(const char *feat);
+        int InsertBigramFeat(const char *feat);
+        int InsertTrigramFeat(const char *feat);
+        int InsertDictFeat(const char *feat);
 
         bool LoadFeatureFile(const char *UnigramFileName);
         bool SaveFeatureFile();

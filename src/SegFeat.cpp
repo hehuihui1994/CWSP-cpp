@@ -38,6 +38,26 @@ namespace cwsp
         return _trigram->GetIndex(feat);
     }
 
+    int SegFeat::InsertUnigramFeat(const char *feat)
+    {
+        return _unigram->GetAndInsertIndex(feat);
+    }
+    
+    int InsertBigramFeat(const char *feat)
+    {
+        return _bigram->GetAndInsertIndex(feat);
+    }
+
+    int InsertTrigramFeat(const char *feat)
+    {
+        return _trigram->GetAndInsertIndex(feat);
+    }
+
+    int InsertDictFeat(const char *feat)
+    {
+        return _dict->GetAndInsertIndex(feat);
+    }
+
     bool SegFeat::LoadFeatureFile(const char *FeatureFileName)
     {
         FILE * FeatureFile;
