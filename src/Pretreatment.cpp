@@ -116,6 +116,10 @@ namespace cwsp
 			vector<string> feat;
 			string feature;
 
+            // Pu(0)
+            feature = toString(_char_type->GetPuncType(charVec.at(i)));
+            feat.push_back(feat);
+
 			// C-2
 			feature = "" + charVec.at(i-2);
 			feat.push_back(feature);
@@ -152,13 +156,39 @@ namespace cwsp
 			/* dict features */
 			//get MWL, t0
 			pair<int, string> ans = _dict->GetDictInfo(charVec.at(i).c_str());
-			/*
-			those dict features
-			*/
+			// MWL+t0
+            feature = toString(ans.first) + ans.second;
+            feat.push_back(feature);
+            // C-1+t0
+            feature = charVec.at(i-1) + ans.second;
+            feat.push_back(feature);
+            // C0+t0
+            feature = charVec.at(i) + ans.second;
+            feat.push_back(feature);
+            // C1+t0
+            feature = charVec.at(i+1) + ans.second;
+            feat.push_back(feature);
 
 			/* type features */
-			
-			featsVec.push_back(feat);
+			//T(-1)T(0)T(1)
+            int index;
+            index = _char_type->GetCharType(charVec.at(i-1));
+            index += 6 * _char_type->GetCharType(charVec.at(i));
+            index += 36 * _char_type->GetCharType(charVec.at(i+1));
+			feat.push_back(toString(index));
+
+            //N(-1)N(0)N(1)
+            index = _char_type->GetCNameType(charVec.at(i-1));
+            index += 6 * _char_type->GetCNameType(charVec.at(i));
+            index += 36 * _char_type->GetCNameType(charVec.at(i+1));
+            feat.push_back(toString(index));
+
+            //F(-1)F(0)F(1)
+            index = _char_type->GetFNameType(charVec.at(i-1));
+            index += 2 * _char_type->GetFNameType(charVec.at(i));
+            index += 4 * _char_type->GetFNameType(charVec.at(i+1));
+
+            featsVec.push_back(feat);
 		}
 	}
 }

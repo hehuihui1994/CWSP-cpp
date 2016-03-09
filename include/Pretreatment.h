@@ -12,6 +12,10 @@
 #include "SegProb.h"
 #include "SegDict.h"
 
+#define TYPE_FEAT_SIZE 216
+#define CNAME_FEAT_TYPE 216
+#define FNAME_FEAT_TYPE 8
+
 namespace cwsp
 {
     class Pretreatment
@@ -35,6 +39,7 @@ namespace cwsp
         // This function processes strings like "我 爱 北京 天安门 。"
         void SplitLine(string &line, vector<string> &charVec, vector<string> &tagVec);
 		void GenerateFeats(vector<string> charVec, vector<string> tagVec, vector<vector<string> > &featsVec);
+        vector<string> SplitString(string terms_str, string spliting_tag);
     private:
         SegFeat *_features;
         SegProb *_probs;
