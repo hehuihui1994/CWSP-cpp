@@ -2,12 +2,26 @@
 #include "SegVocab.h"
 #include "SegProb.h"
 #include "SegDict.h"
+#include "Pretreatment.h"
 #include "Config.h"
 #include <string>
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+    /* Pretreatment test */
+    cout<<"Pretreatment test"<<endl;
+    cwsp::Pretreatment t;
+    cout<<t.LoadCharFile(false)<<endl;
+    cout<<t.LoadDictFile("model/Dict")<<endl;
+    string corpus = argv[1];
+    //string outfile = argv[2];
+    cout<<"read corpus file..."<<endl;
+    t.TrainSegFile(corpus.c_str());
+    // cout<<"\nMaking train data..."<<endl;
+    // t.MakeTrainData(corpus.c_str(), outfile.c_str());
+    // cout<<"Finished."<<endl;
+
     /* SegDict test 
     cout<<"SegDict test\n";
     cwsp::SegDict dict("data/Dict");
@@ -52,7 +66,7 @@ int main(int argc, char *argv[])
     testFeat1.SaveFeatureFile();*/
 
 
-    /* SegProb test*/
+    /* SegProb test
     cout<<"SegProb Test:"<<endl;
     cwsp::SegProb testProb;
 	string file = argv[1];
@@ -72,7 +86,7 @@ int main(int argc, char *argv[])
             cout<<testProb.GetTransProb(i,j)<<" ";
         }
         cout<<endl;
-    }
+    }*/
 	/*
     // testProb.SaveProbFile();
 	testProb.ConvertToBinaryFile("model/Prob","data/Prob.bin");
