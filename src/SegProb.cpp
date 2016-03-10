@@ -11,6 +11,7 @@ namespace cwsp
     {
         _init_prob = new vector<double>;
         _trans_prob = new vector< vector<double> >;
+        tag2index = new map<string, int>;
 
         for(int i=0; i<4; i++)
         {
@@ -18,14 +19,18 @@ namespace cwsp
             vector<double> tmp (4, 0.0);
             _trans_prob->push_back(tmp);
         }
+
+        tag2index->insert(make_pair("B", 0));
+        tag2index->insert(make_pair("M", 1));
+        tag2index->insert(make_pair("E", 2));
+        tag2index->insert(make_pair("S", 3));
     }
 
     SegProb::~SegProb()
     {   
-        _init_prob->clear();
-        _trans_prob->clear();
         delete _init_prob;
         delete _trans_prob;
+        delete tag2index;
     }
 
     void SegProb::InitProbCount(int tag)
@@ -58,6 +63,20 @@ namespace cwsp
         }
         (this->_trans_prob->at(s).at(d))++;
         return;
+    }
+
+    void SegProb::InitProbCount(string tag)
+    {
+        int index = tag2index->at(tag);
+        return InitProbCount(index);
+    }
+
+    void SegProb::TransProbCount(string s, string d)
+    {
+        int s_index, d_index;
+        s_index = tag2index->at(s);
+        d_index = tag2index->at(d);
+        return TransProbCount(s_index, d_index);
     }
 
     bool SegProb::CalcAllProb()

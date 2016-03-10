@@ -38,10 +38,10 @@ namespace cwsp
             return _dict->size();
         }
 
-        int InsertUnigramFeat(const char *feat);
-        int InsertBigramFeat(const char *feat);
-        int InsertTrigramFeat(const char *feat);
-        int InsertDictFeat(const char *feat);
+        int InsertUnigramFeat(const char *feat);   //Insert and get the index of Unigram
+        int InsertBigramFeat(const char *feat);    //Insert and get the index of Bigram
+        int InsertTrigramFeat(const char *feat);   //Insert and get the index of Trigram
+        int InsertDictFeat(const char *feat);      //Insert and get the index of DictFeat
 
         bool LoadFeatureFile(const char *UnigramFileName);
         bool SaveFeatureFile();

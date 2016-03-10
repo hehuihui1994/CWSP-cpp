@@ -12,6 +12,7 @@ namespace cwsp
         _unigram = new Vocab;
         _bigram = new Vocab;
         _trigram = new Vocab;
+        _dict = new Vocab;
         _modifiable = true;
     }
     
@@ -20,42 +21,47 @@ namespace cwsp
         delete _unigram;
         delete _bigram;
         delete _trigram;
-        // delete _dict_feat;
+        delete _dict;
     }
     
     int SegFeat::GetUnigramIndex(const char *feat)
     {
-        return _unigram->GetIndex(feat);
+        return this->_unigram->GetIndex(feat);
     }
 
     int SegFeat::GetBigramIndex(const char *feat)
     {
-        return _bigram->GetIndex(feat);
+        return this->_bigram->GetIndex(feat);
     }
 
     int SegFeat::GetTrigramIndex(const char *feat)
     {
-        return _trigram->GetIndex(feat);
+        return this->_trigram->GetIndex(feat);
+    }
+
+    int SegFeat::GetDictIndex(const char *feat)
+    {
+        return this->_dict->GetIndex(feat);
     }
 
     int SegFeat::InsertUnigramFeat(const char *feat)
     {
-        return _unigram->GetAndInsertIndex(feat);
+        return this->_unigram->GetAndInsertIndex(feat);
     }
     
-    int InsertBigramFeat(const char *feat)
+    int SegFeat::InsertBigramFeat(const char *feat)
     {
-        return _bigram->GetAndInsertIndex(feat);
+        return this->_bigram->GetAndInsertIndex(feat);
     }
 
-    int InsertTrigramFeat(const char *feat)
+    int SegFeat::InsertTrigramFeat(const char *feat)
     {
-        return _trigram->GetAndInsertIndex(feat);
+        return this->_trigram->GetAndInsertIndex(feat);
     }
 
-    int InsertDictFeat(const char *feat)
+    int SegFeat::InsertDictFeat(const char *feat)
     {
-        return _dict->GetAndInsertIndex(feat);
+        return this->_dict->GetAndInsertIndex(feat);
     }
 
     bool SegFeat::LoadFeatureFile(const char *FeatureFileName)
@@ -154,10 +160,13 @@ namespace cwsp
         delete this->_unigram;
         delete this->_bigram;
         delete this->_trigram;
+        delete this->_dict;
         this->_bigram = new Vocab;
         this->_unigram = new Vocab;
         this->_trigram = new Vocab;
+        this->_dict = new Vocab;
 
+        // UnigramFeature
         getline(fin, myTextLine);  // skip the first line
         getline(fin, myTextLine);
         int unigramSize = fromString<int>(myTextLine);
@@ -170,7 +179,7 @@ namespace cwsp
             int index = fromString<int>(tmp.back());
             this->_unigram->InserWordAndIndex(feat, index);
         }
-
+        // BigramFeature
         getline(fin, myTextLine);
         getline(fin, myTextLine);
         int bigramSize = fromString<int>(myTextLine);
@@ -183,7 +192,7 @@ namespace cwsp
             int index = fromString<int>(tmp.back());
             this->_bigram->InserWordAndIndex(feat, index);
         }
-
+        //TrigramFeature
         getline(fin, myTextLine);
         getline(fin, myTextLine);
         int trigramSize = fromString<int>(myTextLine);
@@ -196,7 +205,7 @@ namespace cwsp
             int index = fromString<int>(tmp.back());
             this->_trigram->InserWordAndIndex(feat, index);
         }
-
+        // DitcFeature
         getline(fin, myTextLine);
         getline(fin, myTextLine);
         int dictSize = fromString<int>(myTextLine);
