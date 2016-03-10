@@ -1,10 +1,10 @@
 #InitProb
--0.362983
+0
 -Inf
 -Inf
--1.18941
-#TransPrb
--Inf -1.7636 -0.188049 -Inf
--Inf -0.700846 -0.685507 -Inf
--0.746529 -Inf -Inf -0.642471
--0.537586 -Inf -Inf -0.877446
+-Inf
+#TransProb
+-Inf -0.640046 -0.749227 -Inf 
+-Inf -1.28017 -0.325718 -Inf 
+-2.9335e-05 -Inf -Inf -10.4367 
+0 -Inf -Inf -Inf 
