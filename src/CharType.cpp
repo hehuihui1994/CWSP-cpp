@@ -227,7 +227,7 @@ namespace cwsp
             for (int i = 0; i < numSum; i ++)
             {
                 getline(fin, myTextLine);
-
+                TrimLine(myTextLine);
                 _Str2IntMapIter iter = myMap->find(myTextLine);
                 if (iter != myMap->end())
                 {
@@ -267,6 +267,7 @@ namespace cwsp
             for (int i = 0; i < surSum; i ++)
             {
                 getline(finSur, myTextLine);
+                TrimLine(myTextLine);
                 _Str2IntMapIter iter = chineseNameMap->find(myTextLine);
                 if (iter != chineseNameMap->end())
                 {
@@ -284,6 +285,7 @@ namespace cwsp
             for (int i = 0; i < surSum2; i ++)
             {
                 getline(finSur, myTextLine);
+                TrimLine(myTextLine);
                 _Str2IntMapIter iter = chineseNameMap->find(myTextLine);
                 if (iter != chineseNameMap->end())
                 {
@@ -301,6 +303,7 @@ namespace cwsp
             for (int j = 0; j < givSum; j ++)
             {
                 getline(finGiv, myTextLine);
+                TrimLine(myTextLine);
                 _Str2IntMapIter iter = chineseNameMap->find(myTextLine);
                 if (iter != chineseNameMap->end())
                 {

@@ -12,15 +12,22 @@ int main(int argc, char *argv[])
     /* Pretreatment test */
     cout<<"Pretreatment test"<<endl;
     cwsp::Pretreatment t;
-    cout<<t.LoadCharFile(false)<<endl;
-    cout<<t.LoadDictFile("model/Dict")<<endl;
+    t.LoadCharFile(false);
+    t.LoadDictFile("model/Dict");
+    // string featFile = argv[1];
+    // string probFile = argv[2];
     string corpus = argv[1];
-    //string outfile = argv[2];
+    string outfile = argv[2];
+    // cout<<"Loading model..."<<endl;
+    // t.LoadFeatureFile(featFile.c_str());
+    // t.LoadProbFile(probFile.c_str());
     cout<<"read corpus file..."<<endl;
-    t.TrainSegFile(corpus.c_str());
-    // cout<<"\nMaking train data..."<<endl;
-    // t.MakeTrainData(corpus.c_str(), outfile.c_str());
-    // cout<<"Finished."<<endl;
+    cout<<t.TrainSegFile(corpus.c_str())<<endl;
+    t.PrintInfo();
+    
+    cout<<"\nMaking train data..."<<endl;
+    t.MakeTrainData(corpus.c_str(), outfile.c_str());
+    cout<<"Finished."<<endl;
 
     /* SegDict test 
     cout<<"SegDict test\n";

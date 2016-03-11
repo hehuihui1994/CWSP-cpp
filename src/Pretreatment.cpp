@@ -123,15 +123,6 @@ namespace cwsp
             }
         }
         fin.close();
-        int unigramlen = _features->UnigramLen();
-        int bigramlen = _features->BigramLen();
-        int trigramlen = _features->TrigramLen();
-        int dictlen = _features->DictFeatLen();
-        std::cout<< "Features statistic\n"
-                 << "Unigram feat size:   "<<unigramlen<<endl
-                 << "Bigram feat size:    "<<bigramlen<<endl
-                 << "Trigram feat size:   "<<trigramlen<<endl
-                 << "DictFeat size:       "<<dictlen<<endl;
         is_out_ready = true;
         bool flag = true;
         if (!_probs->CalcAllProb()) flag = false;
@@ -219,22 +210,20 @@ namespace cwsp
                 string character = word.substr(i, 1);
                 if (character.at(0) < 0)
                 {
-                    character = word.substr(i, 2);
-                    i += 2;
+                    character = word.substr(i, 3);
+                    i += 3;
                 }
                 else
                 {
                     i++;
                 }
-                cout<<character<<'/';
                 myCharVec.push_back(character);
                 charVec.push_back(character);
             }
-            cout<<endl;
 
             size_t n = myCharVec.size();
             // for(size_t i=0; i<n;i++) cout<<myCharVec.at(i);
-            // cout<<endl;
+            // cout<<" "<<n<<endl;
 
             if (n == 1)
             {
@@ -272,77 +261,78 @@ namespace cwsp
 			vector<string> feat;
 			string feature;
 
-            // Pu(0)
+            // Pu(0) 0
             feature = toString(_char_type->GetPuncType(charVec.at(i)));
             feat.push_back(feature);
 
-			// C-2
+			// C-2 1
 			feature = "" + charVec.at(i-2);
 			feat.push_back(feature);
-			// C-1
+			// C-1 2
 			feature = "" + charVec.at(i-1);
 			feat.push_back(feature);
-			// C0
+			// C0 3
 			feature = "" + charVec.at(i);
 			feat.push_back(feature);
-			// C1
+			// C1 4
 			feature = "" + charVec.at(i+1);
 			feat.push_back(feature);
-			// C2
+			// C2 5
 			feature = "" + charVec.at(i+2);
 			feat.push_back(feature);
 
-			// C-2C-1
+			// C-2C-1 6
 			feature = "" + charVec.at(i-2) + charVec.at(i-1);
 			feat.push_back(feature);
-			// C-1C0
+			// C-1C0 7
 			feature = "" + charVec.at(i-1) + charVec.at(i);
 			feat.push_back(feature);
-			// C0C1
+			// C0C1 8
 			feature = "" + charVec.at(i) + charVec.at(i+1);
 			feat.push_back(feature);
-			// C1C2
+			// C1C2 9
 			feature = "" + charVec.at(i+1) + charVec.at(i+2);
 			feat.push_back(feature);
 
-			// C-1C1
+			// C-1C1 10
 			feature = "" + charVec.at(i-1) + charVec.at(i+1);
 			feat.push_back(feature);
 
 			/* dict features */
 			//get MWL, t0
 			pair<int, string> ans = _dict->GetDictInfo(charVec.at(i).c_str());
-			// MWL+t0
+			// MWL+t0 11
             feature = toString(ans.first) + ans.second;
             feat.push_back(feature);
-            // C-1+t0
+            // C-1+t0 12
             feature = charVec.at(i-1) + ans.second;
             feat.push_back(feature);
-            // C0+t0
+            // C0+t0 13
             feature = charVec.at(i) + ans.second;
             feat.push_back(feature);
-            // C1+t0
+            // C1+t0 14
             feature = charVec.at(i+1) + ans.second;
             feat.push_back(feature);
 
 			/* type features */
-			//T(-1)T(0)T(1)
+			//T(-1)T(0)T(1) 15
             int index;
             index = 1 + _char_type->GetCharType(charVec.at(i-1));
             index += 6 * _char_type->GetCharType(charVec.at(i));
             index += 36 * _char_type->GetCharType(charVec.at(i+1));
 			feat.push_back(toString(index));
 
-            //N(-1)N(0)N(1)
+            //N(-1)N(0)N(1) 16
             index = 1 + _char_type->GetCNameType(charVec.at(i-1));
             index += 6 * _char_type->GetCNameType(charVec.at(i));
             index += 36 * _char_type->GetCNameType(charVec.at(i+1));
             feat.push_back(toString(index));
 
-            //F(-1)F(0)F(1)
+            //F(-1)F(0)F(1) 17
             index = 1 + _char_type->GetFNameType(charVec.at(i-1));
             index += 2 * _char_type->GetFNameType(charVec.at(i));
             index += 4 * _char_type->GetFNameType(charVec.at(i+1));
+            feat.push_back(toString(index));
 
             featsVec.push_back(feat);
 		}
@@ -358,7 +348,9 @@ namespace cwsp
         {
             vector<string> featVec;
             if (feats.at(i).at(0) == "1")
+            {
                 featVec.push_back("0:1.0");
+            }
             for(size_t j=1;j<feats.at(i).size();j++)
             {
                 if (j<6)
