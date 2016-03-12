@@ -23,18 +23,26 @@ namespace cwsp
         bool Initialize();
         void SegSentence(string & inputSen, string & outputSen);
         void SegFile(string inputfile, string outputfile);
-        void SetAlpha(double & myAlpha);
+        // void SetAlpha(double & myAlpha);
     private:
         // bool CheckMerge(deque<int> & x, deque<int> & y);
         // bool CheckEqual(deque<int> & x, deque<int> & y);
         // void RenewLattice(vector<string> & charSeq);
-        void Viterbi(vector<string> & myCharVec, string & segResult);
-        void GetTagIndex();
+        void SplitLine(string &line, vector<string> &charVec);
+        void GenerateFeats(vector<string> charVec, vector<vector<string> > &featsVec);
+        void Feature2vec(vector<vector<string> > feats, vector<vector<string> > &featsVec);
+        void GetEmitProb(vector<vector<string> > featsVec, vector<vector<double> > &emit_prob);
+        void Viterbi(vector<vector<string> > &myFeatsVec, vector<string> &tagVec);
+        void Tag2Word(vector<string> charVec, vector<string> tagVec, string &line);
+        int GetTagIndex(string tag);
+        string GetTag(int index);
     private:
         SegFeat *_features;
         SegProb *_probs;
         SegDict *_dict;
         CharType *_char_type;
+
+        bool is_initial;
     };
 }
 
