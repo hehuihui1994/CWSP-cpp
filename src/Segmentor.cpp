@@ -23,23 +23,51 @@ namespace cwsp
         delete _char_type;
     }
 
-    int Segmentor::GetTagIndex(string tag)
-    {   
-        int ans;
-        switch(TrimLine(tag))
+    bool Segmentor::Initialize()
+    {
+#ifdef WIN32
+        string _datapath = "model\\";
+#else
+        string _datapath = "model";
+#endif
+        bool is_char_bin = false;
+        string dictfile = _datapath + "Dict";
+        string featfile = _datapath + "Feature";
+        string probfile = _datapath + "Prob";
+        return Initialize(is_char_bin, dictfile, featfile, probfile);
+    }
+
+    bool Segmentor::Initialize(bool is_char_bin, string dictfile, string &featfile, string &probfile)
+    {
+        if(!_char_type->Initialize(is_char_bin))
         {
-        case "B":
-            ans = 0; break;
-        case "M":
-            ans = 1; break;
-        case "E":
-            ans = 2; break;
-        case "S":
-            ans = 3; break;
-        default:
-            ans = -1; break;
+            cerr << "Initialization failed!";
+            cerr << "Can not initialize the CharType."<<endl;
+            return false;
         }
-        return ans;
+
+        if(!_dict->LoadDictFile(dictfile.c_str()))
+        {
+            cerr << "Initialization failed!";
+            cerr << "Can not initialize the SegDict."<<endl;
+            return false;
+        }
+
+        if(!_features->LoadFeatFile(featfile.c_str()))
+        {
+            cerr << "Initialization failed!";
+            cerr << "Can not initialize the SegFeat."<<endl;
+            return false;
+        }
+
+        if(!_prob->LoadProbFile(probfile.c_str()))
+        {
+            cerr << "Initialization failed!";
+            cerr << "Can not initialize the SegProb."<<endl;
+            return false;
+        }
+
+        return true;
     }
 
     string Segmentor::GetTag(int index)
@@ -76,7 +104,7 @@ namespace cwsp
         fin.open(inputfile.c_str());
         if (!fin.is_open())
         {
-            cerr << "Error: "
+            cerr << "Error: ";
             cerr << "Cannot open file\"" << inputfile <<"\"\n";
             return;
         }

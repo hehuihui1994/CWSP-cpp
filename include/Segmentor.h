@@ -20,6 +20,7 @@ namespace cwsp
     public:
         Segmentor();
         ~Segmentor();
+        bool Initialize(bool is_char_bin, string dictfile, string &featfile, string &probfile);
         bool Initialize();
         void SegSentence(string & inputSen, string & outputSen);
         void SegFile(string inputfile, string outputfile);
@@ -34,7 +35,6 @@ namespace cwsp
         void GetEmitProb(vector<vector<string> > featsVec, vector<vector<double> > &emit_prob);
         void Viterbi(vector<vector<string> > &myFeatsVec, vector<string> &tagVec);
         void Tag2Word(vector<string> charVec, vector<string> tagVec, string &line);
-        int GetTagIndex(string tag);
         string GetTag(int index);
     private:
         SegFeat *_features;
