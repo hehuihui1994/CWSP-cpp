@@ -109,7 +109,7 @@ namespace cwsp
 #else
         string _datapath = "model/";
 #endif
-        string FileName = _datapath + "Feature";
+        string FileName = _datapath + "Feat";
         FILE * FeatureFile;
         FeatureFile = fopen(FileName.c_str(), "w");
         

@@ -1,10 +1,17 @@
 CXX ?= g++
 CFLAGS = -Wall -Wconversion -O3 -fPIC
-TARGET = test
-OBJ = test.o src/Pretreatment.o src/CharType.o src/SegDict.o src/SegFeat.o src/SegVocab.o src/SegProb.o src/StrFun.o
+OBJ = src/CharType.o src/SegDict.o src/SegFeat.o src/SegVocab.o src/SegProb.o src/StrFun.o
 
-$(TARGET) : $(OBJ) 
-	$(CXX) $(CFLAGS) -o test $(OBJ)
+all : test convert
+
+convert : convert.o $(OBJ)
+	$(CXX) $(CFLAGS) -o convert convert.o $(OBJ)
+
+convert.o : convert.cpp
+	$(CXX) $(CFLAGS) -I./include -c convert.cpp
+
+test : test.o src/Pretreatment.o $(OBJ) 
+	$(CXX) $(CFLAGS) -o test src/Pretreatment.o $(OBJ)
 
 test.o : test.cpp
 	$(CXX) $(CFLAGS) -I./include -c test.cpp

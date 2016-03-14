@@ -40,9 +40,9 @@ namespace cwsp
         LoadExtraCorpus();
 
 #ifdef WIN32
-        string _datapath = "model\\";
+        string _datapath = "data\\";
 #else
-        string _datapath = "model/";
+        string _datapath = "data/";
 #endif
 
         string binarySource = _datapath + "binarySource";
