@@ -219,14 +219,7 @@ namespace cwsp
     {
 		if (!ReadFile(InputFileName)) return false;
         std::cout<<"Load text Probability file finished."<<endl;
-        FILE* str_lm_file;
         FILE* bin_lm_file;
-        str_lm_file=fopen(InputFileName,"r");
-        if( !str_lm_file )
-        {
-            cerr<<"Can not open the Language Model File: "<<InputFileName<<endl;
-            return false;
-        }
         bin_lm_file=fopen(OutputFileName,"wb");
         fwrite(g_Model_Header.data(), g_Header_Len, 1, bin_lm_file);
         int initProbSzie = (int)this->_init_prob->size();
@@ -245,7 +238,6 @@ namespace cwsp
 				fwrite(&this->_trans_prob->at(i).at(j), sizeof(double), 1, bin_lm_file);
 			}
 		}
-        fclose(str_lm_file);
         fclose(bin_lm_file);
 		std::cout<<"Convert to binary file finished!"<<endl;
         return true;
@@ -320,6 +312,7 @@ namespace cwsp
             //int index = fromString<int>(tmp.back());
 			this->_trans_prob->push_back(probs);
         }
+        fin.close();
         return true;
     }
 
