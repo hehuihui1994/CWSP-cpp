@@ -22,6 +22,10 @@ namespace cwsp
         int size();
         bool LoadDictFile(const char *DictFileName);
         bool SaveDictFile();
+        bool ConvertToBinaryFile(const char* InputFileName, const char* OutputFileName);
+    private:
+        bool ReadFile(const char* FileName);
+        bool ReadBinaryFile(const char* FileName);
     private:
         map<string, pair<int, string> > *_dict;
         typedef map<string, pair<int, string> >::iterator _Str2PairMapIter;
