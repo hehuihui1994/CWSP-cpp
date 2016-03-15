@@ -2,18 +2,19 @@ CXX ?= g++
 CFLAGS = -Wall -Wconversion -O3 -fPIC
 OBJ = src/CharType.o src/SegDict.o src/SegFeat.o src/SegVocab.o src/SegProb.o src/StrFun.o
 
-all : test convert
+all: test convert
+.PHONY: all
 
-convert : convert.o $(OBJ)
+convert: convert.o $(OBJ)
 	$(CXX) $(CFLAGS) -o convert convert.o $(OBJ)
 
-convert.o : convert.cpp
+convert.o: convert.cpp
 	$(CXX) $(CFLAGS) -I./include -c convert.cpp
 
-test : test.o src/Pretreatment.o $(OBJ) 
-	$(CXX) $(CFLAGS) -o test src/Pretreatment.o $(OBJ)
+test: test.o src/Pretreatment.o $(OBJ) 
+	$(CXX) $(CFLAGS) -o test test.o src/Pretreatment.o $(OBJ)
 
-test.o : test.cpp
+test.o: test.cpp
 	$(CXX) $(CFLAGS) -I./include -c test.cpp
 
 src/CharType.o : src/CharType.cpp
@@ -37,6 +38,14 @@ src/SegProb.o : src/SegProb.cpp
 src/StrFun.o : src/StrFun.cpp
 	cd src; $(CXX) $(CFLAGS) -I../include -c StrFun.cpp -o StrFun.o
 
+src/MultiPerceptron.o : src/MultiPerceptron.cpp
+	cd src; $(CXX) $(CFLAGS) -I../include -c MultiPerceptron.cpp -o MultiPerceptron.o
+
 clean:
-	rm -rf *.o *.a $(TARGET)
+	rm -rf *.o *.a
+	cd src; rm -f *.a *.o
+
+cleanall:
+	rm -rf test convert
+	rm -rf *.o *.a
 	cd src; rm -f *.a *.o

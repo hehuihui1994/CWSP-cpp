@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    /* Pretreatment test */
+    /* Pretreatment test 
     cout<<"Pretreatment test"<<endl;
     cwsp::Pretreatment t;
     t.LoadCharFile(false);
@@ -27,15 +27,15 @@ int main(int argc, char *argv[])
     
     cout<<"\nMaking train data..."<<endl;
     t.MakeTrainData(corpus.c_str(), outfile.c_str());
-    cout<<"Finished."<<endl;
+    cout<<"Finished."<<endl;*/
 
-    /* SegDict test 
+    /* SegDict test */
     cout<<"SegDict test\n";
-    cwsp::SegDict dict("data/Dict");
-    pair<int, string> ans;
-    ans = dict.GetDictInfo(" ");
-    cout<<"  "<<ans.first<<" "<<ans.second<<endl;
-    dict.SaveDictFile();*/
+    cwsp::SegDict dict("model/Dict.bin");
+    // pair<int, string> ans;
+    // ans = dict.GetDictInfo(" ");
+    // cout<<"  "<<ans.first<<" "<<ans.second<<endl;
+    dict.SaveDictFile();
 
     /* SegFeat test
     cout<<"SegFeat test"<<endl;

@@ -7,6 +7,7 @@
 #include "SegVocab.h"
 #include "SegProb.h"
 #include "SegDict.h"
+#include "CharType.h"
 #include "Config.h"
 using namespace std;
 
@@ -30,33 +31,33 @@ int main(int argc, char *argv[])
     string binaryProb = _datapath + "Prob.bin";
     string binaryDict = _datapath + "Dict.bin";
 
-    cerr << "Convert txt to binary......" << endl;
+    cerr << "Convert txt to binary......\n" << endl;
     cwsp::SegFeat myFeat;
     cwsp::SegProb myProb;
     cwsp::SegDict myDict;
     if(myFeat.ConvertToBinaryFile(featfile.c_str(), binaryFeat.c_str())){
-        cerr << "Feature file conversion is finished." << endl;
+        cerr << "Feature file convertion is finished.\n" << endl;
     }
     else
     {
-        cerr << "Error! Failed to convert Feature file to binary."<<endl;
+        cerr << "Error! Failed to convert Feature file to binary.\n"<<endl;
     }
 
     if(myProb.ConvertToBinaryFile(probfile.c_str(), binaryProb.c_str())){
-        cerr << "Probability file conversion is finished." << endl;
+        cerr << "Probability file convertion is finished.\n" << endl;
     }
     else
     {
-        cerr << "Error! Failed to convert Probability file to binary."<<endl;
+        cerr << "Error! Failed to convert Probability file to binary.\n"<<endl;
     }
 
     if(myDict.ConvertToBinaryFile(dictfile.c_str(), binaryDict.c_str())){
-        cerr << "Dictionary file conversion is finished." << endl;
+        cerr << "Dictionary file convertion is finished.\n" << endl;
     }
     else
     {
-        cerr << "Error! Failed to convert Dictionary file to binary."<<endl;
+        cerr << "Error! Failed to convert Dictionary file to binary.\n"<<endl;
     }
-    cerr << "Convertion is finished." << endl;
+    cerr << "\n\nConvertion is finished." << endl;
     return 0;
 }
