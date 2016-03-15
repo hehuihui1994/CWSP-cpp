@@ -12,6 +12,7 @@
 #include "SegFeat.h"
 #include "SegProb.h"
 #include "SegDict.h"
+#include "MultiPerceptron.h"
 
 namespace cwsp
 {
@@ -20,7 +21,7 @@ namespace cwsp
     public:
         Segmentor();
         ~Segmentor();
-        bool Initialize(bool is_char_bin, string dictfile, string &featfile, string &probfile);
+        bool Initialize(bool is_char_bin, string dictfile, string &featfile, string &probfile, string &mpfile);
         bool Initialize();
         void SegSentence(string & inputSen, string & outputSen);
         void SegFile(string inputfile, string outputfile);
@@ -41,6 +42,7 @@ namespace cwsp
         SegProb *_probs;
         SegDict *_dict;
         CharType *_char_type;
+        MultiPerceptron *_mp;
 
         bool is_initial;
     };

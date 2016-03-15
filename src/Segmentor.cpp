@@ -13,6 +13,7 @@ namespace cwsp
         _probs = new SegProb;
         _dict = new SegDict;
         _char_type = new CharType;
+        _mp = new MultiPerceptron;
     }
 
     Segmentor::~Segmentor()
@@ -21,6 +22,7 @@ namespace cwsp
         delete _probs;
         delete _dict;
         delete _char_type;
+        delete _mp;
     }
 
     bool Segmentor::Initialize()
@@ -34,10 +36,11 @@ namespace cwsp
         string dictfile = _datapath + "Dict";
         string featfile = _datapath + "Feature";
         string probfile = _datapath + "Prob";
-        return Initialize(is_char_bin, dictfile, featfile, probfile);
+        string mpfile = _datapath + "Model";
+        return Initialize(is_char_bin, dictfile, featfile, probfile, mpfile);
     }
 
-    bool Segmentor::Initialize(bool is_char_bin, string dictfile, string &featfile, string &probfile)
+    bool Segmentor::Initialize(bool is_char_bin, string dictfile, string &featfile, string &probfile, string &mpfile)
     {
         if(!_char_type->Initialize(is_char_bin))
         {
@@ -64,6 +67,13 @@ namespace cwsp
         {
             cerr << "Initialization failed!";
             cerr << "Can not initialize the SegProb."<<endl;
+            return false;
+        }
+
+        if(!_mp->load_model(mpfile))
+        {
+            cerr << "Initialization failed!";
+            cerr << "Can not initialize the MultiPerceptron."<<endl;
             return false;
         }
 
@@ -415,5 +425,39 @@ namespace cwsp
             featsVec.push_back(featVec);
         }
         return ;
+    }
+
+    void Segmentor::GetEmitProb(vector<vector<string> > featsVec, vector<vector<double> > &emit_prob)
+    {
+        _mp->classify_samps_withprb(featsVec, emit_prob);
+    }
+
+    void Segmentor::Tag2word(vector<string> charVec, vector<string> tagVec, string &line)
+    {
+        line.clear();
+        string word;
+        for(size_t i=0;i<tagVec.size();i++)
+        {
+            if(tagVec.at(i)=="S")
+            {
+                line += " " + charVec.at(i);
+                word.clear();
+            }
+            else if(tagVec.at(i)=="B")
+            {
+                word += charVec.at(i);
+            }
+            else if(tagVec.at(i)=="M")
+            {
+                word += charVec.at(i);
+            }
+            else
+            {
+                word += charVec.at(i);
+                line += " " + word;
+                word.clear();
+            }
+        }
+        return;
     }
 }
