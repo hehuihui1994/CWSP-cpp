@@ -137,8 +137,8 @@ namespace cwsp
          delete _dict;
         _dict = new map<string, pair<int, string> >;
 
-        int dictSize;
-        fread(&dictSize, sizeof(int), 1, DictFile);
+        size_t dictSize;
+        fread(&dictSize, sizeof(size_t), 1, DictFile);
         int unit, t0_len, MWL;
         string word, t0;
         for(int i=0;i<dictSize;i++)
