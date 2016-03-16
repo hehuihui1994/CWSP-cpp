@@ -52,17 +52,15 @@ namespace cwsp
         fin.open(FileName);
         if (!fin.is_open())
         {
-            cerr << "###########################################" << endl;
+            cerr << "\nPretreatment ERROR" << endl;
             cerr << "Open " << FileName<< " error!" << endl;
-            cerr << "###########################################" << endl;
             return false;
         }
 
         if(!is_dict_ready || !is_char_ready)
         {
-            cerr << "###########################################" <<endl;
+            cerr << "\nPretreatment ERROR" << endl;
             cerr << "SegDict or CharType not ready for Training SegFile!" <<endl;
-            cerr << "###########################################" <<endl;
             return false;
         }
 
@@ -143,17 +141,15 @@ namespace cwsp
         fin.open(corpus);
         if (!fin.is_open())
         {
-            cerr << "###########################################" << endl;
+            cerr << "\nPretreatment ERROR" << endl;
             cerr << "Open " << corpus << " error!" << endl;
-            cerr << "###########################################" << endl;
             return false;
         }
 
         if(!is_dict_ready || !is_char_ready)
         {
-            cerr << "###########################################" <<endl;
+            cerr << "\nPretreatment ERROR" << endl;
             cerr << "SegDict or CharType not ready for Training SegFile!" <<endl;
-            cerr << "###########################################" <<endl;
             return false;
         }
         ofstream outfile;

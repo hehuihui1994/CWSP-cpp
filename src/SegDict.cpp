@@ -44,6 +44,7 @@ namespace cwsp
         DictFile = fopen(DictFileName, "rb");
         if (!DictFile)
         {
+            cerr << "\nSegDict ERROR" << endl;
             cerr << "Can not open the Dictionary file: "<<DictFileName<<endl;
             return false;
         }
@@ -64,7 +65,8 @@ namespace cwsp
     bool SegDict::SaveDictFile(){
         if (_dict == NULL || _dict->size()==0)
         {
-            cerr<<"\nDoes not have any Dictionary information."<<endl;
+            cerr << "\nSegDict ERROR" << endl;
+            cerr << "Does not have any Dictionary information."<<endl;
             return false;
         }
 #ifdef WIN32
@@ -95,7 +97,8 @@ namespace cwsp
         fin.open(FileName);
         if ( !fin.is_open())
         {
-            cerr<<"\nCan not open the Dictionary file: "<<FileName<<endl;
+            cerr << "\nSegDict ERROR" << endl;
+            cerr << "Can not open the Dictionary file: "<<FileName<<endl;
             return false;
         }
 
@@ -127,7 +130,8 @@ namespace cwsp
         DictFile = fopen(FileName, "rb");
         if (!DictFile)
         {
-            cerr<<"\nCan not open the Dictionary file: "<<FileName<<endl;
+            cerr << "\nSegDict ERROR" << endl;
+            cerr << "Can not open the Dictionary file: "<<FileName<<endl;
             return false;
         }
         char headBuf[UNIGRAM_LEN_MAX];

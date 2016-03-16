@@ -70,7 +70,8 @@ namespace cwsp
         FeatureFile = fopen(FeatureFileName, "rb");
         if( !FeatureFile )
         {
-            cerr<<"\nCan not open the Feature Model File: "<<FeatureFileName<<endl;
+            cerr << "\nSegFeat ERROR" << endl;
+            cerr << "Can not open the Feature Model File: "<<FeatureFileName<<endl;
             return false;
         }
         char headBuf[UNIGRAM_LEN_MAX];
@@ -91,17 +92,20 @@ namespace cwsp
     {
         if( ( _unigram==NULL ) || (_unigram->size()<=0) )
         {
-            cerr<<"\nDoes not have any feature in Unigram."<<endl;
+            cerr << "\nSegFeat ERROR" << endl;
+            cerr << "Does not have any feature in Unigram."<<endl;
             return false;
         }
         if( ( _bigram==NULL ) || (_bigram->size()<=0) )
         {
-            cerr<<"\nDoes not have any feature in Bigram."<<endl;
+            cerr << "\nSegFeat ERROR" << endl;
+            cerr << "Does not have any feature in Bigram."<<endl;
             return false;
         }
         if( ( _trigram==NULL ) || (_trigram->size()<=0) )
         {
-            cerr<<"\nDoes not have any feature in Trigram."<<endl;
+            cerr << "\nSegFeat ERROR" << endl;
+            cerr << "Does not have any feature in Trigram."<<endl;
             return false;
         }
 #ifdef WIN32
@@ -151,7 +155,8 @@ namespace cwsp
         fin.open(FileName);
         if( !fin.is_open() )
         {
-            cerr<<"\nCan not open the Feature model file: "<<FileName<<endl;
+            cerr << "\nSegFeat ERROR" << endl;
+            cerr << "Can not open the Feature model file: "<<FileName<<endl;
             return false;
         }
 
@@ -228,7 +233,8 @@ namespace cwsp
         FeatureFile = fopen(FileName, "rb");
         if( !FeatureFile )
         {
-            cerr<<"\nCan not open the Feature model file: "<<FileName<<endl;
+            cerr << "\nSegFeat ERROR" << endl;
+            cerr << "Can not open the Feature model file: "<<FileName<<endl;
             return false;
         }
         char headBuf[UNIGRAM_LEN_MAX];
@@ -301,7 +307,8 @@ namespace cwsp
         str_lm_file=fopen(InputFileName,"r");
         if( !str_lm_file )
         {
-            cerr<<"Can not open the Language Model File: "<<InputFileName<<endl;
+            cerr << "\nSegFeat ERROR" << endl;
+            cerr << "Can not open the Language Model File: "<<InputFileName<<endl;
             return false;
         }
         bin_lm_file=fopen(OutputFileName,"wb");

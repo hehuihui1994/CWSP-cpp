@@ -114,7 +114,8 @@ namespace cwsp
         bin_source_file = fopen(binarySource.c_str(), "rb");
         if( !bin_source_file )
         {
-            cerr<<"Can not open the Model File: "<< binarySource <<endl;
+            cerr << "\nCharType ERROR" << endl;
+            cerr << "Can not open the Model File: "<< binarySource <<endl<<endl;
             return false;
         }
 
@@ -213,6 +214,7 @@ namespace cwsp
         fin.open(characterTypeFile.c_str());
         if (!fin.is_open())
         {
+            cerr << "\nCharType ERROR" << endl;
             cerr << "Open " << characterTypeFile << " error!" << endl;
             return;
         }
@@ -249,11 +251,13 @@ namespace cwsp
         finGiv.open(givennameFile.c_str());
         if (!finSur.is_open())
         {
+            cerr << "\nCharType ERROR" << endl;
             cerr << "Open " << surnameFile << " error!" << endl;
             return;
         }
         else if (!finGiv.is_open())
         {
+            cerr << "\nCharType ERROR" << endl;
             cerr << "Open " << givennameFile << " error!" << endl;
             return;
         }

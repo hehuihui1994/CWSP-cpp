@@ -44,6 +44,7 @@ namespace cwsp
     {
         if(!_char_type->Initialize(is_char_bin))
         {
+            cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
             cerr << "Can not initialize the CharType."<<endl;
             return false;
@@ -51,6 +52,7 @@ namespace cwsp
 
         if(!_dict->LoadDictFile(dictfile.c_str()))
         {
+            cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
             cerr << "Can not initialize the SegDict."<<endl;
             return false;
@@ -58,6 +60,7 @@ namespace cwsp
 
         if(!_features->LoadFeatFile(featfile.c_str()))
         {
+            cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
             cerr << "Can not initialize the SegFeat."<<endl;
             return false;
@@ -65,6 +68,7 @@ namespace cwsp
 
         if(!_prob->LoadProbFile(probfile.c_str()))
         {
+            cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
             cerr << "Can not initialize the SegProb."<<endl;
             return false;
@@ -72,6 +76,7 @@ namespace cwsp
 
         if(!_mp->load_model(mpfile))
         {
+            cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
             cerr << "Can not initialize the MultiPerceptron."<<endl;
             return false;
@@ -103,7 +108,7 @@ namespace cwsp
     {
         if (!is_initial)
         {
-            cerr << "Error: ";
+            cerr << "\nSegmentor ERROR" << endl;
             cerr << "The Segmentor have not been initialized yet." <<endl;
             return;
         }
@@ -114,7 +119,7 @@ namespace cwsp
         fin.open(inputfile.c_str());
         if (!fin.is_open())
         {
-            cerr << "Error: ";
+            cerr << "\nSegmentor ERROR" << endl;
             cerr << "Cannot open file\"" << inputfile <<"\"\n";
             return;
         }

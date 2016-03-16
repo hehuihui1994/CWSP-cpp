@@ -37,12 +37,14 @@ namespace cwsp
     {
         if (this->_init_prob == NULL)
         {
-            cerr<<"Fatal Error, there is no _init_prob!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Error: the init_prob point to NULL!"<<endl;
             return;
         }
         if (tag < g_tagIdLbound || tag > g_tagIdRbound)
         {
-            cerr<<"Error, given tag beyond the range of 4-tag-system!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Given tag beyond the range of 4-tag-system!"<<endl;
             return;
         }
         (this->_init_prob->at(tag))++;
@@ -53,12 +55,14 @@ namespace cwsp
     {
         if (this->_trans_prob == NULL)
         {
-            cerr<<"Fatal Error, there is no _trans_prob!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Error: the trans_prob point to NULL!"<<endl;
             return;
         }
         if (s < g_tagIdLbound || s > g_tagIdRbound || d < g_tagIdLbound|| d > g_tagIdRbound)
         {
-            cerr<<"Error, given tag beyond the range of 4-tag-system!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Given tag beyond the range of 4-tag-system!"<<endl;
             return;
         }
         (this->_trans_prob->at(s).at(d))++;
@@ -119,12 +123,14 @@ namespace cwsp
     {
         if (this->_init_prob == NULL)
         {
-            cerr<<"Fatal Error, there is no _init_prob!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Error: the init_prob point to NULL!"<<endl;
             return 0.0;
         }
         if (tag < g_tagIdLbound || tag > g_tagIdRbound)
         {
-            cerr<<"Error, given tag beyond the range of 4-tag-system!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Given tag beyond the range of 4-tag-system!"<<endl;
             return 0.0;
         }
         return this->_init_prob->at(tag);
@@ -134,12 +140,14 @@ namespace cwsp
     {
         if (this->_trans_prob == NULL)
         {
-            cerr<<"Fatal Error, there is no _trans_prob!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Error: the trans_prob point to NULL!"<<endl;
             return 0.0;
         }
         if (s < g_tagIdLbound || s > g_tagIdRbound || d < g_tagIdLbound|| d > g_tagIdRbound)
         {
-            cerr<<"Error, given tag beyond the range of 4-tag-system!"<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Given tag beyond the range of 4-tag-system!"<<endl;
             return 0.0;
         }
         return this->_trans_prob->at(s).at(d);
@@ -151,7 +159,8 @@ namespace cwsp
 		ProbFile = fopen(FileName, "rb");
 		if (!ProbFile)
 		{
-			cerr<<"\nCan not open the Probability info file: "<<FileName<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+			cerr << "Can not open the Probability info file: "<<FileName<<endl;
 			return false;
 		}
 		char headBuf[UNIGRAM_LEN_MAX];
@@ -172,7 +181,9 @@ namespace cwsp
     {
         if (this->_init_prob == NULL || this->_trans_prob == NULL)
         {
-            cerr<<"\nDoes not have any probability information."<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Does not have any probability information." << endl;
+            cerr << "The init_prob & trans_prob point to NULL!" << endl;
             return false;
         }
 #ifdef WIN32
@@ -249,7 +260,8 @@ namespace cwsp
         fin.open(FileName);
         if( !fin.is_open() )
         {
-            cerr<<"\nCan not open the Probability info file: "<<FileName<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Can not open the Probability info file: "<<FileName<<endl;
             return false;
         }
 
@@ -322,7 +334,8 @@ namespace cwsp
         probFile = fopen(FileName, "rb");
         if( !probFile )
         {
-            cerr<<"\nCan not open the Probability info file: "<<FileName<<endl;
+            cerr << "\nSegProb ERROR" << endl;
+            cerr << "Can not open the Probability info file: "<<FileName<<endl;
             return false;
         }
         char headBuf[UNIGRAM_LEN_MAX];
