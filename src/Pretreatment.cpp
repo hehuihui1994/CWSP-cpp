@@ -64,6 +64,7 @@ namespace cwsp
             return false;
         }
 
+        int numIndex = 0;
         while(!fin.eof())
         {
             string myTextLine;
@@ -72,6 +73,16 @@ namespace cwsp
             if(myTextLine.length()==0)
             {
                 continue; // skip the empty line
+            }
+            numIndex ++;
+            if (numIndex%100 == 0)
+            {
+                std::cout << ".";
+                std::cout.flush();
+                if (numIndex%5000 == 0)
+                {
+                    std::cout << "\t" << numIndex << " sentences" << endl;
+                }
             }
             vector<string> charVec, tagVec;
             // cout<< myTextLine<<endl;
@@ -121,6 +132,8 @@ namespace cwsp
             }
         }
         fin.close();
+        std::cout << endl;
+        std::cout << numIndex << " sentences in total.\n" << endl;
         is_out_ready = true;
         bool flag = true;
         if (!_probs->CalcAllProb()) flag = false;
@@ -152,6 +165,7 @@ namespace cwsp
             cerr << "SegDict or CharType not ready for Training SegFile!" <<endl;
             return false;
         }
+        int numIndex = 0;
         ofstream outfile;
         outfile.open(output);
         while(!fin.eof())
@@ -162,6 +176,16 @@ namespace cwsp
             if(myTextLine.length()==0)
             {
                 continue; // skip the empty line
+            }
+            numIndex ++;
+            if (numIndex%100 == 0)
+            {
+                std::cout << ".";
+                std::cout.flush();
+                if (numIndex%5000 == 0)
+                {
+                    std::cout << "\t" << numIndex << " samples" << endl;
+                }
             }
             vector<string> charVec, tagVec;
             SplitLine(myTextLine, charVec, tagVec);
@@ -181,6 +205,8 @@ namespace cwsp
         }
         fin.close();
         outfile.close();
+        std::cout << endl;
+        std::cout << numIndex << " samples in total." << endl;
         //outfile.clear();
         return true;
     }
