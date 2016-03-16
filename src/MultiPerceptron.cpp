@@ -132,7 +132,7 @@ namespace cwsp
 	bool MultiPerceptron::load_training_file(string training_file)
 	{
 		cout << "Loading training data..." << endl;
-		read_samp_file(training_file, samp_feat_vec, samp_class_vec);
+		if(!read_samp_file(training_file, samp_feat_vec, samp_class_vec)) return false;
 		feat_set_size = 0;
 		class_set_size = 0;
 		for (size_t i = 0; i < samp_class_vec.size(); i++) {
@@ -145,6 +145,7 @@ namespace cwsp
 		}
 		class_set_size += 1;
 		feat_set_size += 1;
+		return true;
 	}
 
 	void MultiPerceptron::init_omega()
@@ -384,13 +385,14 @@ namespace cwsp
 		return acc;
 	}
 
-	bool MultiPerceptron::classify_samps_withprb(vector<vector<string> >featsVec, vector<vector<double> &probs)
+	bool MultiPerceptron::classify_samps_withprb(vector<vector<string> >featsVec, vector<vector<double> > &probs)
 	{
 		vector<feature> test_feat_vec;
 		if(!read_samps_vec(featsVec, test_feat_vec)) return false;
 		for (size_t i = 0; i < test_feat_vec.size(); i++) {
 			feature samp_feat = test_feat_vec[i];
-			vector<float> pred_prb = score_to_prb(calc_score(samp_feat));
+			vector<float> score = calc_score(samp_feat);
+			vector<float> pred_prb = score_to_prb(score);
 			vector<double> prob;
 			for(size_t j=0;j<pred_prb.size();j++)
 			{

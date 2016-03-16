@@ -67,7 +67,7 @@ namespace cwsp
             int bigramlen = _features->BigramLen();
             int trigramlen = _features->TrigramLen();
             int dictlen = _features->DictFeatLen();
-            std::cout<< "Features statistic\n"
+            std::cout<< "\nFeatures statistic\n"
                      << "Unigram feat size:   "<<unigramlen<<endl
                      << "Bigram feat size:    "<<bigramlen<<endl
                      << "Trigram feat size:   "<<trigramlen<<endl

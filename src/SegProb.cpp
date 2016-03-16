@@ -223,6 +223,7 @@ namespace cwsp
             prob += "\n";
             fwrite(prob.data(), prob.length(), 1, ProbFile);
         }
+        std::cout<<"SegProb file have been saved.\n";
         return true;
     }
 

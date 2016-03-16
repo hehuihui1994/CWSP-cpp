@@ -146,6 +146,7 @@ namespace cwsp
         _dict->WriteVocabText(FeatureFile);
 
         fclose(FeatureFile);
+        std::cout<<"SegFeat file have been saved.\n";
         return true;
     }
 

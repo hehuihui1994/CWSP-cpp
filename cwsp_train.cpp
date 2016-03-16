@@ -8,28 +8,32 @@
 #include <string>
 using namespace std;
 
+#define LINE_LEN_MAX 256
+
 void print_help() {
     cout << cwsp::g_copyright
-        << "usage: cwsp_train [options] corpus_file model_file\n\n"
-        << "options: -h        -> help\n\n"
-        << "related resources file configuration:\n"
-        << "         -b [0,1]  -> 0: CharType resource file is a text file\n"
-        << "                   -> 1: CharType resource file is a binary file (default)\n"
-        << "         -d dict   -> Dictionary file (default:model\\Dict.bin)\n"
-        // << "         -f feat   -> Feature file (default:model\\Feat.bin)\n"
-        // << "         -p prob   -> Probability file (default:model\\Prob.bin)\n"
-        << "         -o path   -> Path to save training data file for MultiPerceptron (default:data\\train)"
-
-        << "\nTraining parameters:\n"
-        << "         -n int    -> maximal iteration loops (default 200)\n"
-        << "         -m double -> minimal loss value decrease (default 1e-03)\n"
-        << "         -r [0,1]  -> 0: training model by SGD optimization (default)\n"
-        << "                   -> 1: Gradient Descent optimization"     
-        << "         -l float  -> learning rate (default 1.0)\n"
-        << "         -a        -> 0: final weight (default)\n"
-        << "                   -> 1: average weights of all iteration loops\n"
-        // << "         -u [0,1]  -> 0: initial training model (default)\n"
-        // << "                   -> 1: updating model (pre_model_file is needed)\n" 
+        << "\n\nUSAGE: cwsp_train [options] <corpus_file> <model_file>\n"
+        << "OPTIONS:\n"
+        << "        -h            -> help\n\n"
+        << "        [Resources file configuration]\n"
+        << "        -b [0,1]      -> 0: CharType resource file is a text file\n"
+        << "                      -> 1: CharType resource file is a binary file (default)\n"
+        << "        -d <dict>     -> Dictionary file (default: model\\Dict.bin)\n"
+        // << "        -f <feat>     -> Feature file (default: model\\Feat.bin)\n"
+        // << "        -p <prob>     -> Probability file (default: model\\Prob.bin)\n"
+        << "        -o <path>     -> Path to save training data for MultiPerceptron\n"
+        << "                         (default: data\\train)\n"
+        << "\n\n"
+        << "        [Training parameters]\n"
+        << "        -n int        -> maximal iteration loops (default 200)\n"
+        << "        -m double     -> minimal loss value decrease (default 1e-03)\n"
+        << "        -r [0,1]      -> 0: training model by SGD optimization (default)\n"
+        << "                      -> 1: Gradient Descent optimization\n"     
+        << "        -l float      -> learning rate (default 1.0)\n"
+        << "        -a            -> 0: final weight (default)\n"
+        << "                      -> 1: average weights of all iteration loops\n"
+        // << "        -u [0,1]      -> 0: initial training model (default)\n"
+        // << "                      -> 1: updating model (pre_model_file is needed)\n" 
         << endl;
 }
 
@@ -41,7 +45,7 @@ void read_parameters(int argc, char *argv[], char *corpus_file, char *model_file
     string _modelpath = "model\\";
     string _datapath = "data\\";
 #else
-    string _modelpath = "model/"
+    string _modelpath = "model/";
     string _datapath = "data/";
 #endif
     is_bin = true;
@@ -129,20 +133,47 @@ int cwsp_train(int argc, char *argv[])
 
     string corpus = string(corpus_file);
     string model = string(model_file);
+    cout << cwsp::g_copyright<<endl;
     cwsp::Pretreatment t;
-    t.LoadCharFile(is_bin);
-    t.LoadDictFile(dictfile.c_str());
-    cout<<"\n\nReading corpus file..."<<endl;
+
+    if (t.LoadCharFile(is_bin))
+    {
+        cout << "Load Character type file finished."<<endl;
+    }
+    else
+    {
+        cout << "ERROR! Trouble with resource file, please check if the file\n";
+        cout << "is exist or contact to the Author.\n";
+        exit(0);
+    }
+
+    if (t.LoadDictFile(dictfile.c_str()))
+    {
+        cout << "Load Dictionary finished." << endl;
+    }
+    else
+    {
+        cout << "ERROR! Trouble with resource file, please check if the file\n";
+        cout << "is exist or contact to the Author.\n";
+        exit(0);
+    }
+
+    cout << "\nReading corpus file..."<<endl;
     t.TrainSegFile(corpus.c_str()); // TrainSegFile will save Prob & Feat.
     t.PrintInfo();
 
     cout<<"\nMaking train data..."<<endl;
     t.MakeTrainData(corpus.c_str(), trainfile.c_str());
-    cout<<"Finished."<<endl;
+    cout<<"Pretreatment Finished."<<endl;
 
     cout<<"\n********************Train********************\n"<<endl;
     cwsp::MultiPerceptron mp;
-    mp.load_training_file(trainfile);
+    if (!mp.load_training_file(trainfile))
+    {
+        cout << "\nERROR! Trouble with train file, please check if the file\n";
+        cout << "is exist or contact to the Author.\n";
+        exit(0);
+    }
     mp.init_omega();
     if (optim) {
         mp.train_batch(max_loop, loss_thrd, learn_rate, avg);       
@@ -150,7 +181,10 @@ int cwsp_train(int argc, char *argv[])
     else {
         mp.train_SGD(max_loop, loss_thrd, learn_rate, avg);
     }
-    mp.save_model(model);
+    if(!mp.save_model(model))
+    {
+        exit(0);
+    }
     return 1;
 }
 
