@@ -2,7 +2,9 @@ CXX ?= g++
 CFLAGS = -Wall -Wconversion -O3 -fPIC
 OBJ = src/CharType.o src/SegDict.o src/SegFeat.o src/SegVocab.o src/SegProb.o src/StrFun.o
 
-all: test convert
+all: cwsp_train convert
+	rm -rf *.o *.a
+	cd src; rm -f *.a *.o
 .PHONY: all
 
 convert: convert.o $(OBJ)
@@ -11,11 +13,11 @@ convert: convert.o $(OBJ)
 convert.o: convert.cpp
 	$(CXX) $(CFLAGS) -I./include -c convert.cpp
 
-test: test.o src/Pretreatment.o $(OBJ) 
-	$(CXX) $(CFLAGS) -o test test.o src/Pretreatment.o $(OBJ)
+cwsp_train: cwsp_train.o src/MultiPerceptron.o src/Pretreatment.o $(OBJ) 
+	$(CXX) $(CFLAGS) -o cwsp_train cwsp_train.o src/MultiPerceptron.o src/Pretreatment.o $(OBJ)
 
-test.o: test.cpp
-	$(CXX) $(CFLAGS) -I./include -c test.cpp
+cwsp_train.o: cwsp_train.cpp
+	$(CXX) $(CFLAGS) -I./include -c cwsp_train.cpp
 
 src/CharType.o : src/CharType.cpp
 	cd src; $(CXX) $(CFLAGS) -I../include -c CharType.cpp -o CharType.o
@@ -44,8 +46,10 @@ src/MultiPerceptron.o : src/MultiPerceptron.cpp
 clean:
 	rm -rf *.o *.a
 	cd src; rm -f *.a *.o
+	cd data; rm -rf train
 
 cleanall:
-	rm -rf test convert
+	rm -rf cwsp_train convert
 	rm -rf *.o *.a
 	cd src; rm -f *.a *.o
+	cd data; rm -rf train
