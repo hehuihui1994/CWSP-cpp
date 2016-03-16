@@ -60,6 +60,10 @@ namespace cwsp
 
     const int g_tagIdLbound = 0;
     const int g_tagIdRbound = 3;
+
+    const int TYPE_FEAT_SIZE = 216;
+    const int CNAME_FEAT_SIZE = 216;
+    const int FNAME_FEAT_SIZE = 8;
 }
 
 #endif
