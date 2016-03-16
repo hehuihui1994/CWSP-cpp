@@ -133,7 +133,7 @@ int cwsp_train(int argc, char *argv[])
     t.LoadCharFile(is_bin);
     t.LoadDictFile(dictfile.c_str());
     cout<<"\n\nReading corpus file..."<<endl;
-    cout<<t.TrainSegFile(corpus.c_str())<<endl; // TrainSegFile will save Prob & Feat.
+    t.TrainSegFile(corpus.c_str()); // TrainSegFile will save Prob & Feat.
     t.PrintInfo();
 
     cout<<"\nMaking train data..."<<endl;
