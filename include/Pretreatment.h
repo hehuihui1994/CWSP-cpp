@@ -12,10 +12,6 @@
 #include "SegProb.h"
 #include "SegDict.h"
 
-#define TYPE_FEAT_SIZE 216
-#define CNAME_FEAT_SIZE 216
-#define FNAME_FEAT_SIZE 8
-
 namespace cwsp
 {
     class Pretreatment

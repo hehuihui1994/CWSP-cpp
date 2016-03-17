@@ -85,16 +85,12 @@ namespace cwsp
                 }
             }
             vector<string> charVec, tagVec;
-            // cout<< myTextLine<<endl;
             SplitLine(myTextLine, charVec, tagVec);
 
-            // init tag prob
-            // std::cout<<"init:"<<tagVec.at(2)<<" is "<<tag2index->at(tagVec.at(2))<<endl;
             _probs->InitProbCount(tag2index->at(tagVec.at(2)));
             // trans tag prob
             for(size_t i=2; i<tagVec.size()-3; i++)
             {
-                // std::cout<<"trans:"<<tagVec.at(i)<<" is "<<tag2index->at(tagVec.at(i))<<endl;
                 int s = tag2index->at(tagVec.at(i));
                 int d = tag2index->at(tagVec.at(i+1));
                 _probs->TransProbCount(s, d);
@@ -230,10 +226,17 @@ namespace cwsp
             for (size_t i = 0; i < word.length();)
             {
                 string character = word.substr(i, 1);
-                if (character.at(0) < 0)
+                if (character.at(0)<0)
                 {
-                    character = word.substr(i, 3);
-                    i += 3;
+                    if (character == "·")
+                    {
+                        i += 2;
+                    }
+                    else
+                    {
+                        character = line.substr(i, 3);
+                        i += 3;
+                    }
                 }
                 else
                 {
@@ -244,8 +247,6 @@ namespace cwsp
             }
 
             size_t n = myCharVec.size();
-            // for(size_t i=0; i<n;i++) cout<<myCharVec.at(i);
-            // cout<<" "<<n<<endl;
 
             if (n == 1)
             {

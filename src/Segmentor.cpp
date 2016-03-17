@@ -58,7 +58,7 @@ namespace cwsp
             return false;
         }
 
-        if(!_features->LoadFeatFile(featfile.c_str()))
+        if(!_features->LoadFeatureFile(featfile.c_str()))
         {
             cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
@@ -66,7 +66,7 @@ namespace cwsp
             return false;
         }
 
-        if(!_prob->LoadProbFile(probfile.c_str()))
+        if(!_probs->LoadProbFile(probfile.c_str()))
         {
             cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
@@ -81,7 +81,7 @@ namespace cwsp
             cerr << "Can not initialize the MultiPerceptron."<<endl;
             return false;
         }
-
+        is_initial = true;
         return true;
     }
 
@@ -151,8 +151,10 @@ namespace cwsp
                 }
                 else
                 {
+                    //std::cout<< inputSen <<endl;
                     string outputSen;
                     SegSentence(inputSen, outputSen);
+                    TrimLine(outputSen);
                     fout << outputSen << endl;
                 }
             }
@@ -168,14 +170,15 @@ namespace cwsp
 
     void Segmentor::SegSentence(string & inputSen, string & outputSen)
     {
-        TrimLine(inputSen);
         vector<string> myCharVec;
         SplitLine(inputSen, myCharVec);
+        vector<vector<string> > myFeats;
+        GenerateFeats(myCharVec, myFeats);
         vector<vector<string> > myFeatsVec;
-        GenerateFeats(myCharVec, myFeatsVec);
+        Feature2vec(myFeats, myFeatsVec);
         vector<string> myTagVec;
         Viterbi(myFeatsVec, myTagVec);
-        Tag2word(myCharVec, myTagVec, outputSen);
+        Tag2Word(myCharVec, myTagVec, outputSen);
     }
 
     void Segmentor::Viterbi(vector<vector<string> > &myFeatsVec, vector<string> &tagVec)
@@ -243,7 +246,8 @@ namespace cwsp
             taglist.push_front(preTag);
             --t;
         }
-        std::cout<<"Check if the length of taglist equal to charVec:"<<taglist.size()==n<<endl;
+        // int tttt = (taglist.size()==n)?1:0;
+        // std::cout<<"Check if the length of taglist equal to charVec:"<<tttt<<endl;
         tagVec.clear();
         for(size_t i=0;i<n;i++)
         {
@@ -263,14 +267,21 @@ namespace cwsp
         charVec.push_back("B_1");
         charVec.push_back("B_0");
 
-        TrimLine(line);
         for(size_t i=0; i<line.length();)
         {
             string character = line.substr(i, 1);
             if (character.at(0)<0)
             {
-                character = line.substr(i, 3);
-                i += 3;
+                character = line.substr(i, 2);
+                if (character == "·")
+                {
+                    i += 2;
+                }
+                else
+                {
+                    character = line.substr(i, 3);
+                    i += 3;
+                }
             }
             else
             {
@@ -437,7 +448,7 @@ namespace cwsp
         _mp->classify_samps_withprb(featsVec, emit_prob);
     }
 
-    void Segmentor::Tag2word(vector<string> charVec, vector<string> tagVec, string &line)
+    void Segmentor::Tag2Word(vector<string> charVec, vector<string> tagVec, string &line)
     {
         line.clear();
         string word;
@@ -445,23 +456,29 @@ namespace cwsp
         {
             if(tagVec.at(i)=="S")
             {
-                line += " " + charVec.at(i);
+                word = charVec.at(i+2);
+                // std::cout<<word<<endl;
+                line += " " + word;
                 word.clear();
             }
             else if(tagVec.at(i)=="B")
             {
-                word += charVec.at(i);
+                // std::cout<<"B\n";
+                word += charVec.at(i+2);
             }
             else if(tagVec.at(i)=="M")
             {
-                word += charVec.at(i);
+                // std::cout<<"M\n";
+                word += charVec.at(i+2);
             }
             else
             {
-                word += charVec.at(i);
+                // std::cout<<"E\n";
+                word += charVec.at(i+2);
                 line += " " + word;
                 word.clear();
             }
+            // std::cout<<line<<endl;
         }
         return;
     }
