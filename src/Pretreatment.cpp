@@ -121,7 +121,7 @@ namespace cwsp
                     else
                     {
                         /* type features */
-                        // T(-1)T(0)T(1), N(-1)N(0)N(1), F(-1)F(0)F(1) do not need insert
+                        // T(-1)T(0)T(1), N(-1)N(0)N(1), F(-1)F(0)F(1) do not need to insert
                         continue;
                     }
                 }
@@ -228,13 +228,14 @@ namespace cwsp
                 string character = word.substr(i, 1);
                 if (character.at(0)<0)
                 {
+                    character = word.substr(i, 2);
                     if (character == "·")
                     {
                         i += 2;
                     }
                     else
                     {
-                        character = line.substr(i, 3);
+                        character = word.substr(i, 3);
                         i += 3;
                     }
                 }
@@ -289,36 +290,36 @@ namespace cwsp
             feat.push_back(feature);
 
 			// C-2 1
-			feature = "" + charVec.at(i-2);
+			feature = charVec.at(i-2);
 			feat.push_back(feature);
 			// C-1 2
-			feature = "" + charVec.at(i-1);
+			feature = charVec.at(i-1);
 			feat.push_back(feature);
 			// C0 3
-			feature = "" + charVec.at(i);
+			feature = charVec.at(i);
 			feat.push_back(feature);
 			// C1 4
-			feature = "" + charVec.at(i+1);
+			feature = charVec.at(i+1);
 			feat.push_back(feature);
 			// C2 5
-			feature = "" + charVec.at(i+2);
+			feature = charVec.at(i+2);
 			feat.push_back(feature);
 
 			// C-2C-1 6
-			feature = "" + charVec.at(i-2) + charVec.at(i-1);
+			feature = charVec.at(i-2) + charVec.at(i-1);
 			feat.push_back(feature);
 			// C-1C0 7
-			feature = "" + charVec.at(i-1) + charVec.at(i);
+			feature = charVec.at(i-1) + charVec.at(i);
 			feat.push_back(feature);
 			// C0C1 8
-			feature = "" + charVec.at(i) + charVec.at(i+1);
+			feature = charVec.at(i) + charVec.at(i+1);
 			feat.push_back(feature);
 			// C1C2 9
-			feature = "" + charVec.at(i+1) + charVec.at(i+2);
+			feature = charVec.at(i+1) + charVec.at(i+2);
 			feat.push_back(feature);
 
 			// C-1C1 10
-			feature = "" + charVec.at(i-1) + charVec.at(i+1);
+			feature = charVec.at(i-1) + charVec.at(i+1);
 			feat.push_back(feature);
 
 			/* dict features */
