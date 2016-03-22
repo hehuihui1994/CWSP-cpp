@@ -11,6 +11,7 @@
 #include "SegFeat.h"
 #include "SegProb.h"
 #include "SegDict.h"
+#include "MultiPerceptron.h"
 
 namespace cwsp
 {
@@ -22,7 +23,7 @@ namespace cwsp
 		bool LoadDictFile(const char *DictFileName);
 		bool LoadCharFile(bool is_bin);
         bool TrainSegFile(const char *FileName);
-        bool MakeTrainData(const char *corpus, const char *output);
+        bool MakeTrainData(const char *corpus, vector<feature> &samp_feat_vec, vector<int> &samp_class_vec);
         bool SaveFeatureFile()
         {
             return _features->SaveFeatureFile();
