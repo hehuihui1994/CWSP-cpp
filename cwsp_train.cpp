@@ -21,8 +21,6 @@ void print_help() {
         << "        -d <dict>     -> Dictionary file (default: model\\Dict.bin)\n"
         // << "        -f <feat>     -> Feature file (default: model\\Feat.bin)\n"
         // << "        -p <prob>     -> Probability file (default: model\\Prob.bin)\n"
-        << "        -o <path>     -> Path to save training data for MultiPerceptron\n"
-        << "                         (default: data\\train)\n"
         << "\n\n"
         << "        [Training parameters]\n"
         << "        -n int        -> maximal iteration loops (default 200)\n"
@@ -39,18 +37,15 @@ void print_help() {
 
 void read_parameters(int argc, char *argv[], char *corpus_file, char *model_file, 
                         int *max_loop, double *loss_thrd, float *learn_rate, int *optim, 
-                        int *avg, bool &is_bin, string &dictfile, string &trainfile) {
+                        int *avg, bool &is_bin, string &dictfile) {
     // set default options
 #ifdef WIN32
     string _modelpath = "model\\";
-    string _datapath = "data\\";
 #else
     string _modelpath = "model/";
-    string _datapath = "data/";
 #endif
     is_bin = true;
     dictfile = _modelpath + "Dict.bin";
-    trainfile = _datapath + "train";
 
     *max_loop = 200;
     *loss_thrd = 1e-3;
@@ -68,10 +63,10 @@ void read_parameters(int argc, char *argv[], char *corpus_file, char *model_file
                 dictfile.clear();
                 dictfile = string(argv[++i]);
                 break;
-            case 'o':
-                trainfile.clear();
-                trainfile = string(argv[++i]);
-                break;
+            // case 'o':
+            //     trainfile.clear();
+            //     trainfile = string(argv[++i]);
+            //     break;
             case 'h':
                 print_help();
                 exit(0);
@@ -128,8 +123,8 @@ int cwsp_train(int argc, char *argv[])
     int avg;
     bool is_bin; 
     string dictfile;
-    string trainfile;
-    read_parameters(argc, argv, corpus_file, model_file, &max_loop, &loss_thrd, &learn_rate, &optim, &avg, is_bin, dictfile, trainfile);
+    // string trainfile;
+    read_parameters(argc, argv, corpus_file, model_file, &max_loop, &loss_thrd, &learn_rate, &optim, &avg, is_bin, dictfile);
 
     string corpus = string(corpus_file);
     string model = string(model_file);
@@ -162,13 +157,18 @@ int cwsp_train(int argc, char *argv[])
     t.TrainSegFile(corpus.c_str()); // TrainSegFile will save Prob & Feat.
     t.PrintInfo();
 
+    vector<cwsp::feature> feats_vec;
+    vector<int> class_vec;
+
     cout<<"\nMaking train data..."<<endl;
-    t.MakeTrainData(corpus.c_str(), trainfile.c_str());
+    // t.MakeTrainData(corpus.c_str(), trainfile.c_str());
+    t.MakeTrainData(corpus.c_str(), feats_vec, class_vec);
     cout<<"Pretreatment Finished."<<endl;
 
     cout<<"\n********************Train********************\n"<<endl;
     cwsp::MultiPerceptron mp;
-    if (!mp.load_training_file(trainfile))
+    // if (!mp.load_training_file(trainfile))
+    if (!mp.load_training_data(feats_vec, class_vec))
     {
         cout << "\nERROR! Trouble with train file, please check if the file\n";
         cout << "is exist or contact to the Author.\n";
