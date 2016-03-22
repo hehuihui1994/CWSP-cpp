@@ -32,6 +32,7 @@ namespace cwsp
     	bool save_model(string model_file);
         bool load_model(string model_file);
 	    bool load_training_file(string training_file);
+        bool load_training_data(vector<feature> feat_vec, vector<int> class_vec);
     	void init_omega();
 	
         int train_SGD(int max_loop, double loss_thrd, float learn_rate, int avg);

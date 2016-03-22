@@ -148,6 +148,27 @@ namespace cwsp
 		return true;
 	}
 
+	bool MultiPerceptron::load_training_data(vector<feature> feat_vec, vector<int> class_vec)
+	{
+		cout<< "Loading training data..." <<endl;
+		samp_feat_vec = feat_vec;
+		samp_class_vec = class_vec;
+		if( samp_feat_vec.size()==0 || samp_class_vec.size()==0) return false;
+		feat_set_size = 0;
+		class_set_size = 0;
+		for (size_t i = 0; i < samp_class_vec.size(); i++) {
+			if (samp_class_vec[i] > class_set_size) {
+				class_set_size = samp_class_vec[i];
+			}
+			if (samp_feat_vec[i].id_vec.back() > feat_set_size) {
+				feat_set_size = samp_feat_vec[i].id_vec.back();
+			}
+		}
+		class_set_size += 1;
+		feat_set_size += 1;
+		return true;
+	}
+
 	void MultiPerceptron::init_omega()
 	{
 		//float int_value = 0.0;
