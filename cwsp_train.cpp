@@ -36,7 +36,7 @@ void print_help() {
 }
 
 void read_parameters(int argc, char *argv[], char *corpus_file, char *model_file, 
-                        int *max_loop, double *loss_thrd, float *learn_rate, int *optim, 
+                        size_t *max_loop, double *loss_thrd, float *learn_rate, int *optim, 
                         int *avg, bool &is_bin, string &dictfile) {
     // set default options
 #ifdef WIN32
@@ -71,7 +71,8 @@ void read_parameters(int argc, char *argv[], char *corpus_file, char *model_file
                 print_help();
                 exit(0);
             case 'n':
-                *max_loop = atoi(argv[++i]);
+
+                *max_loop = size_t(atoi(argv[++i]));
                 break;
             case 'm':
                 *loss_thrd = atof(argv[++i]);
@@ -116,7 +117,7 @@ int cwsp_train(int argc, char *argv[])
 {
     char corpus_file[LINE_LEN_MAX];
     char model_file[LINE_LEN_MAX];
-    int max_loop;
+    size_t max_loop;
     double loss_thrd;
     float learn_rate;
     int optim;
