@@ -35,7 +35,7 @@ namespace cwsp
         bool load_training_data(vector<feature> feat_vec, vector<int> class_vec);
     	void init_omega();
 	
-        int train_SGD(int max_loop, double loss_thrd, float learn_rate, int avg);
+        int train_SGD(size_t max_loop, double loss_thrd, float learn_rate, int avg);
         int train_batch(int max_loop, double loss_thrd, float learn_rate, int avg);
 	    vector<float> calc_score(feature &samp_feat);
 	    vector<float> score_to_prb(vector<float> &score);

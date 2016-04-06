@@ -181,18 +181,18 @@ namespace cwsp
 	}
 
 	// Stochastic Gradient Descent (SGD) optimization
-	int MultiPerceptron::train_SGD(int max_loop, double loss_thrd, float learn_rate, int avg)
+	int MultiPerceptron::train_SGD(size_t max_loop, double loss_thrd, float learn_rate, int avg)
 	{
-		int id = 0;
+		size_t id = 0;
 		double loss = 0.0;
 		double loss_pre = 0.0;
 		vector< vector<float> > omega_sum(omega);
-		while (id <= max_loop*(int)samp_class_vec.size())
+		while (id <= max_loop*samp_class_vec.size())
 		{
 			// check loss value
 			if (id%samp_class_vec.size() == 0)
 			{
-				int loop = id/(int)samp_class_vec.size();
+				size_t loop = id/samp_class_vec.size();
 				double loss = 0.0;
 				float acc = 0.0;
 				calc_loss(&loss, &acc);			//perceptron critierion
