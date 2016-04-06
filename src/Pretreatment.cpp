@@ -162,8 +162,8 @@ namespace cwsp
             return false;
         }
         int numIndex = 0;
-        // ofstream outfile;
-        // outfile.open(output);
+        ofstream outfile;
+        outfile.open("data/train");
         while(!fin.eof())
         {
             string myTextLine;
@@ -192,7 +192,7 @@ namespace cwsp
             for (size_t i=0; i<featsVec.size(); i++)
             {
                 samp_class_vec.push_back(tag2index->at(tagVec.at(i+2)));
-                // outfile << tag2index->at(tagVec.at(i+2)) << '\t';
+                outfile << tag2index->at(tagVec.at(i+2)) << '\t';
                 feature samp_feat;
                 for (auto it : featsVec.at(i)) // size_t j=0; j<featsVec.at(i).size(); j++)
                 {
@@ -203,14 +203,14 @@ namespace cwsp
                         samp_feat.id_vec.push_back(feat_id);
                         samp_feat.value_vec.push_back(feat_value);
                     }
-                    // outfile << featsVec.at(i).at(j) <<' ';
+                    outfile << it <<' ';
                 }
-                //outfile<<'\n';
+                outfile<<'\n';
                 samp_feat_vec.push_back(samp_feat);
             }
         }
         fin.close();
-        // outfile.close();
+        outfile.close();
         std::cout << endl;
         std::cout << numIndex << " samples in total." << endl;
         //outfile.clear();
@@ -232,6 +232,7 @@ namespace cwsp
         istringstream is(line.c_str());
         while (is >> word)
         {
+            std::cout<<word<<' ';
             vector<string> myCharVec;
             for (size_t i = 0; i < word.length();)
             {
@@ -253,9 +254,11 @@ namespace cwsp
                 {
                     i++;
                 }
+                std::cout<<character;
                 myCharVec.push_back(character);
                 charVec.push_back(character);
             }
+            std::cout<<endl;
 
             size_t n = myCharVec.size();
 
