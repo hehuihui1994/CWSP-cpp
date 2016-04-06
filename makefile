@@ -1,5 +1,5 @@
 CXX ?= g++
-CFLAGS = -Wall -Wconversion -O3 -fPIC
+CFLAGS = -std=c++11 -Wall -Wconversion -O3 -fPIC
 OBJ = src/CharType.o src/SegDict.o src/SegFeat.o src/SegVocab.o src/SegProb.o src/StrFun.o src/Segmentor.o src/MultiPerceptron.o src/Pretreatment.o
 
 all: cwsp_train cwsp_seg convert
