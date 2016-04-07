@@ -230,9 +230,10 @@ namespace cwsp
 
         string word;
         istringstream is(line.c_str());
+        // std::cout<<"line: "<<line<<endl;
         while (is >> word)
         {
-            std::cout<<word<<' ';
+            // std::cout<<"word: "<<word<<"\nSplited: ";
             vector<string> myCharVec;
             for (size_t i = 0; i < word.length();)
             {
@@ -254,11 +255,11 @@ namespace cwsp
                 {
                     i++;
                 }
-                std::cout<<character;
+                // std::cout<<character<<'/';
                 myCharVec.push_back(character);
                 charVec.push_back(character);
             }
-            std::cout<<endl;
+            // std::cout<<endl;
 
             size_t n = myCharVec.size();
 
