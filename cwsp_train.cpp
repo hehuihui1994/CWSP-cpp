@@ -18,7 +18,7 @@ void print_help() {
         << "        [Resources file configuration]\n"
         << "        -b [0,1]      -> 0: CharType resource file is a text file\n"
         << "                      -> 1: CharType resource file is a binary file (default)\n"
-        << "        -d <dict>     -> Dictionary file (default: model\\Dict.bin)\n"
+        << "        -d <dict>     -> Dictionary file (default: model\\Dict)\n"
         // << "        -f <feat>     -> Feature file (default: model\\Feat.bin)\n"
         // << "        -p <prob>     -> Probability file (default: model\\Prob.bin)\n"
         << "\n\n"
@@ -45,7 +45,7 @@ void read_parameters(int argc, char *argv[], char *corpus_file, char *model_file
     string _modelpath = "model/";
 #endif
     is_bin = true;
-    dictfile = _modelpath + "Dict.bin";
+    dictfile = _modelpath + "Dict";
 
     *max_loop = 200;
     *loss_thrd = 1e-3;
