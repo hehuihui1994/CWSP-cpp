@@ -193,7 +193,7 @@ namespace cwsp
 			if (id%samp_class_vec.size() == 0)
 			{
 				size_t loop = id/samp_class_vec.size();
-				double loss = 0.0;
+				loss = 0.0;
 				float acc = 0.0;
 				calc_loss(&loss, &acc);			//perceptron critierion
 				cout.setf(ios::left);
@@ -382,7 +382,7 @@ namespace cwsp
 		read_samp_file(testing_file, test_feat_vec, test_class_vec);
 		ofstream fout(output_file.c_str());
 		for (size_t i = 0; i < test_class_vec.size(); i++) {
-			int samp_class = test_class_vec[i];
+			// int samp_class = test_class_vec[i];
 			feature samp_feat = test_feat_vec[i];
 			vector<float> pred_score = calc_score(samp_feat);			
 			int pred_class = score_to_class(pred_score);
