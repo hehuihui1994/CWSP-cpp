@@ -1,6 +1,13 @@
 /********************************************************************
 * cwsp: Chinese Word Segmentation Toolkit used multi-perceptron.
+* Copyright (C) 2016 Shenghuan He
+* Contact: heshenghuan328@gmail.com
 
+* Permission to use, copy, modify, and distribute this software for
+* any non-commercial purpose is hereby granted without fee, provided
+* that the above copyright notice appear in all copies and that both
+* that copyright notice. 
+* It is provided "as is" without express or implied warranty.
 *********************************************************************/
 
 #ifndef CONFIG_H_
@@ -30,8 +37,8 @@ using namespace std;
 
 namespace cwsp
 {
-    const string g_copyright = "\ncwsp: Chinese Word Segmentation Toolkit used multi-perceptron.\nCopyright (C) 2016. Version: 1.0, Last update: 2016-04-07\n";
-    const string g_version = "\nVersion: 1.0, Last update: 2016-04-07\n";
+    const string g_copyright = "\ncwsp: Chinese Word Segmentation Toolkit used multi-perceptron.\nCopyright (C) 2016. Version: 1.0.0, Last update: 2016-04-07\n";
+    const string g_version = "\nVersion: 1.0.0, Last update: 2016-04-07\n";
 
     const string g_Model_Header = "#bin,model";
     const int g_Header_Len = (int)g_Model_Header.length();
