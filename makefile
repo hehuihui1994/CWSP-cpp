@@ -4,6 +4,7 @@ OBJ = src/CharType.o src/SegDict.o src/SegFeat.o src/SegVocab.o src/SegProb.o sr
 
 all: cwsp_train cwsp_seg convert
 	rm -rf *.o *.a
+	cd src; rm -rf *.a *.o
 .PHONY: all
 
 test: test.o $(OBJ)
