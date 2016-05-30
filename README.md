@@ -35,10 +35,7 @@ OPTIONS:
     	-b [0,1]      -> 0: CharType resource file is a text file
         	          -> 1: CharType resource file is a binary file (default)
         -d <dict>     -> Dictionary file (default: model\Dict)
-```
 
-
-```shell
 	    [Training parameters]
     	-n int        -> maximal iteration loops (default 200)
         -m double     -> minimal loss value decrease (default 1e-03)
