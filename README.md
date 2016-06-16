@@ -6,7 +6,7 @@
 
 > CWSP is a Chinese word segmentation toolkit. It used MultiPerceptron algorithm to train model and the Viterbi algorithm to do decode work. Implemented by c++.
 
-
+[README in Chinese](./README_zh.md)
 
 ## Data format
 
