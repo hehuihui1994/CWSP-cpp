@@ -21,20 +21,20 @@ using namespace std;
 void print_help() {
     cout << cwsp::g_copyright
         << "\n\nNAME\n"
-        << "    convert -- convert model & src file of CWSP from text to binary file"
-        << "USAGE: "
+        << "    convert -- convert model & src file of CWSP from text to binary file\n"
+        << "USAGE: \n"
         << "    convert [-Ac][-dfpm file]\n"
         << "OPTIONS:\n"
         << "     -h    Print help infomation\n\n"
         << "     -A    Convert all the model & src file with default path. Include: \n"
-        << "           CharType(./data/*), Feat(./model/Feat), Prob(./model/Prob), Dict"
-        << "           (./model/Dict) and Model(./model/Model). And also you can use "
+        << "           CharType(./data/*), Feat(./model/Feat), Prob(./model/Prob), Dict\n"
+        << "           (./model/Dict) and Model(./model/Model). And also you can use \n"
         << "           following command [-dfpm file] to give a specified file.\n\n"
         << "     -c    Convert all the CharType files under './data/'\n\n"
         << "     -d    Convert Dict file from the specified file(default: ./model/Dict)\n\n"
         << "     -f    Convert Feat file from the specified file(default: ./model/Feat)\n\n"
         << "     -p    Convert Prob file from the specified file(default: ./model/Prob)\n\n"
-        << "     -m    Convert MultiPerceptron Model file from the specified file(default:"
+        << "     -m    Convert MultiPerceptron Model file from the specified file(default:\n"
         << "           ./model/Model)\n"
         << endl;
 }
@@ -92,12 +92,14 @@ void read_parameters(int argc, char *argv[], bool *All, bool *c, bool *d,
 
 bool CharTypeConvert(){
     cwsp::CharType myCharType;
-    return myCharType.Convert2Binary();
+    // this func has no return value while it should have return a bool
+    // so need change the CharType.Convert2Binary() func
+    myCharType.Convert2Binary();
 }
 
 int main(int argc, char *argv[])
 {
-    cerr << cwsp::g_copyright << endl;
+    // cerr << cwsp::g_copyright << endl;
 
 #ifdef WIN32
     string _modelpath = "model\\";
@@ -118,7 +120,7 @@ int main(int argc, char *argv[])
     string binaryModel = _modelpath + "Model.bin";
 
     bool A = false,c = false,d = false,f = false,p = false,m = false;
-
+    // print_help();
     // cerr << "Convert txt to binary......\n" << endl;
     // cwsp::SegFeat myFeat;
     // cwsp::SegProb myProb;
