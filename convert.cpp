@@ -15,6 +15,7 @@
 #include "SegProb.h"
 #include "SegDict.h"
 #include "CharType.h"
+#include "MultiPerceptron.h"
 #include "Config.h"
 using namespace std;
 
@@ -23,13 +24,14 @@ void print_help() {
         << "\n\nNAME\n"
         << "    convert -- convert model & src file of CWSP from text to binary file\n"
         << "USAGE: \n"
-        << "    convert [-Ac][-dfpm file]\n"
+        << "    convert [-A] [-c][-dfpm file]\n"
         << "OPTIONS:\n"
         << "     -h    Print help infomation\n\n"
         << "     -A    Convert all the model & src file with default path. Include: \n"
         << "           CharType(./data/*), Feat(./model/Feat), Prob(./model/Prob), Dict\n"
         << "           (./model/Dict) and Model(./model/Model). And also you can use \n"
         << "           following command [-dfpm file] to give a specified file.\n\n"
+        << "     Following command can be used to convert a specified model file.\n"
         << "     -c    Convert all the CharType files under './data/'\n\n"
         << "     -d    Convert Dict file from the specified file(default: ./model/Dict)\n\n"
         << "     -f    Convert Feat file from the specified file(default: ./model/Feat)\n\n"
@@ -95,59 +97,90 @@ bool CharTypeConvert(){
     // this func has no return value while it should have return a bool
     // so need change the CharType.Convert2Binary() func
     myCharType.Convert2Binary();
+    return true;
 }
 
-int main(int argc, char *argv[])
-{
-    // cerr << cwsp::g_copyright << endl;
+bool SegFeatConvert(string featfile, string binaryFeat){
+    cwsp::SegFeat myFeat;
+    return myFeat.ConvertToBinaryFile(featfile.c_str(), binaryFeat.c_str());
+}
 
+bool SegDictConvert(string dictfile, string binaryDict) {
+    cwsp::SegDict myDict;
+    return myDict.ConvertToBinaryFile(dictfile.c_str(), binaryDict.c_str());
+}
+
+bool SegProbConvert(string probfile, string binaryProb) {
+    cwsp::SegProb myProb;
+    return myProb.ConvertToBinaryFile(probfile.c_str(), binaryProb.c_str());
+}
+
+bool MultiPerceptronConvert(string modelfile, string binaryModel) {
+    cwsp::MultiPerceptron myPercp;
+    return myPercp.ConvertToBinaryFile(modelfile, binaryModel);
+}
+
+int convert(int argc, char *argv[])
+{
 #ifdef WIN32
     string _modelpath = "model\\";
 #else
     string _modelpath = "model/";
 #endif
 
-    // cwsp::CharType myCharType;
-    // myCharType.Convert2Binary();
-
     string featfile = _modelpath + "Feat";
     string probfile = _modelpath + "Prob";
     string dictfile = _modelpath + "Dict";
     string modelfile = _modelpath + "Model";
-    string binaryFeat = _modelpath + "Feat.bin";
-    string binaryProb = _modelpath + "Prob.bin";
-    string binaryDict = _modelpath + "Dict.bin";
-    string binaryModel = _modelpath + "Model.bin";
 
     bool A = false,c = false,d = false,f = false,p = false,m = false;
-    // print_help();
-    // cerr << "Convert txt to binary......\n" << endl;
-    // cwsp::SegFeat myFeat;
-    // cwsp::SegProb myProb;
-    // cwsp::SegDict myDict;
-    // if(myFeat.ConvertToBinaryFile(featfile.c_str(), binaryFeat.c_str())){
-    //     cerr << "Feature file conversion is finished.\n" << endl;
-    // }
-    // else
-    // {
-    //     cerr << "Error! Failed to convert Feature file to binary.\n"<<endl;
-    // }
+    read_parameters(argc, argv, &A, &c, &d, dictfile, &f, featfile, &p, probfile, &m, modelfile);
 
-    // if(myProb.ConvertToBinaryFile(probfile.c_str(), binaryProb.c_str())){
-    //     cerr << "Probability file conversion is finished.\n" << endl;
-    // }
-    // else
-    // {
-    //     cerr << "Error! Failed to convert Probability file to binary.\n"<<endl;
-    // }
+    string binaryFeat = featfile + ".bin";
+    string binaryProb = probfile + ".bin";
+    string binaryDict = dictfile + ".bin";
+    string binaryModel = modelfile + ".bin";
 
-    // if(myDict.ConvertToBinaryFile(dictfile.c_str(), binaryDict.c_str())){
-    //     cerr << "Dictionary file conversion is finished.\n" << endl;
-    // }
-    // else
-    // {
-    //     cerr << "Error! Failed to convert Dictionary file to binary.\n"<<endl;
-    // }
-    // cerr << "\n\nConversion is finished." << endl;
-    return 0;
+    if(!(A||c||d||f||p||m)){
+        cerr << "Not enough parameters!" << endl;
+        print_help();
+        exit(0);
+    }
+
+    if(A||c){
+        if(CharTypeConvert())
+            cerr << "CharType file conversion is finished.\n" << endl;
+        else
+            cerr << "Error! Failed to convert CharType file to binary.\n" << endl;
+    }
+    if(A||d){
+        if(SegDictConvert(dictfile, binaryDict))
+            cerr << "Dictionary file conversion is finished.\n" << endl;
+        else
+            cerr << "Error! Failed to convert Dictionary file to binary.\n"<<endl;
+    }
+    if(A||f){
+        if(SegFeatConvert(featfile, binaryFeat))
+            cerr << "Feature file conversion is finished.\n" << endl;
+        else
+            cerr << "Error! Failed to convert Feature file to binary.\n"<<endl;
+    }
+    if(A||p){
+        if(SegProbConvert(probfile, binaryProb))
+            cerr << "Probability file conversion is finished.\n" << endl;
+        else
+            cerr << "Error! Failed to convert Probability file to binary.\n"<<endl;
+    }
+    if(A||m){
+        if(MultiPerceptronConvert(modelfile, binaryModel))
+            cerr << "MultiPerceptron model file conversion is finished.\n" << endl;
+        else
+            cerr << "Error! Failed to convert MultiPerceptron model file to binary.\n"<<endl;
+    }
+    return 1;
+}
+
+int main(int argc, char *argv[])
+{
+    return convert(argc, argv);
 }
