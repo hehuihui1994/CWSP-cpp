@@ -41,15 +41,65 @@ namespace cwsp
     	return true;
 	}
 
+	bool MultiPerceptron::save_bin_model(string model_file)
+	{
+		// clock_t begin, finish;
+    	// begin = clock();
+		if(feat_set_size==0 || class_set_size==0)
+		{
+			cerr << "\nMultiPerceptron ERROR"<<endl;
+			cerr << "\nDoes not have any data to save.\n" << endl;
+			return false;
+		}
+		cout << "Saving model..." << endl;
+		FILE* bin_model_file = fopen(model_file.c_str(), "wb");
+		fwrite(g_Model_Header.data(), g_Header_Len, 1, bin_model_file);
+    	fwrite(&class_set_size, sizeof(int), 1, bin_model_file);
+    	fwrite(&feat_set_size, sizeof(int), 1, bin_model_file);
+    	for(int i=0; i<feat_set_size; i++) {
+      	  for(int j=0; j<class_set_size; j++) {
+      	      fwrite(&omega[i][j], sizeof(float), 1, bin_model_file);
+      	  }
+   	 	}
+    	fclose(bin_model_file);
+    	// finish = clock();
+    	// cout << "Finished! Cost " << (double) (finish - begin) / CLOCKS_PER_SEC << "s" <<endl;
+    	return true;
+	}
+
+	bool MultiPerceptron::read_model(string model_file)
+	{
+		FILE *infile;
+        infile = fopen(model_file.c_str(), "rb");
+        if(!infile)
+        {
+            cerr << "\nMultiPerceptron Model File ERROR" << endl;
+            cerr << "Can not open the MultiPerceptron Model File: "<< model_file <<endl;
+            return false;
+        }
+        char headBuf[UNIGRAM_LEN_MAX];
+        fread(&headBuf, g_Header_Len, 1, FeatureFile);
+        fclose(FeatureFile);
+        string header = string(headBuf, g_Header_Len);
+        if (header == g_Model_Header)
+        {
+            return load_bin_model(model_file);
+        }
+        else
+        {
+            return load_model(model_file);
+        }
+	}
+
 	bool MultiPerceptron::load_model(string model_file)
 	{
 		cout << "Loading model..." << endl;
 		omega.clear();
     	ifstream fin(model_file.c_str());
     	if(!fin) {
-    		cerr << "\nMultiPerceptron ERROR"<<endl;
-        	cerr << "Error opening file: " << model_file << endl;
-        	return false;
+    		cerr << "\nMultiPerceptron Model File ERROR" << endl;
+            cerr << "Can not open the MultiPerceptron Model File: "<< model_file <<endl;
+            return false;
     	}
     	string line_str;
     	// Read feat_set_size
@@ -72,7 +122,41 @@ namespace cwsp
 		feat_set_size = (int)omega.size();
 		// the size of a element of omega is the num of label.
 		class_set_size = (int)omega[0].size();
+		std::cout << "Loaded a "<<class_set_size<<"*"<<feat_set_size<<" omega matrix."<<endl;
 		return true;
+	}
+
+	bool MultiPerceptron::load_bin_model(string model_file)
+	{
+		cout << "Loading binary model..." << endl;
+		omega.clear();
+		FILE* bin_model_file = fopen(model_file.c_str(), "rb");
+		if(bin_model_file == NULL) {
+			cerr << "\nMultiPerceptron Model File ERROR" << endl;
+            cerr << "Can not open the MultiPerceptron Model File: "<<model_file<<endl;
+            return false;
+		}
+    	char headBuf[UNIGRAM_LEN_MAX];
+    	fread(&headBuf, g_Header_Len, 1, bin_model_file);
+    	string header = string(headBuf, g_Header_Len);
+    	cout << "Header of file: " << header << endl; 
+    	class_set_size = 0;
+    	feat_set_size = 0;
+    	fread(&class_set_size, sizeof(int), 1, bin_model_file);
+    	fread(&feat_set_size, sizeof(int), 1, bin_model_file);
+    	// cout<<"class size: "<<class_set_size<<", feature size: "<<feat_set_size<<endl;
+    	for(int i=0; i<feat_set_size; i++) {
+        	vector<float> line_omega;
+        	for(int j=0; j<class_set_size; j++) {
+            	float tmp;
+            	fread(&tmp, sizeof(float), 1, bin_model_file);
+            	line_omega.push_back(tmp);
+        	}
+        	omega.push_back(line_omega);
+    	}
+    	fclose(bin_model_file);
+    	std::cout << "Loaded a "<<class_set_size<<"*"<<feat_set_size<<" omega matrix."<<endl;
+    	return true;
 	}
 
 	bool MultiPerceptron::read_samp_file(string samp_file, vector<feature> &samp_feat_vec, vector<int> &samp_class_vec)
@@ -453,6 +537,23 @@ namespace cwsp
 	{
 		double sgm = 1 / (1+exp(-(double)x));
 		return (float)sgm;
+	}
+
+	bool MultiPerceptron::ConvertToBinaryFile(string InputFileName, string OutputFileName)
+	{
+		if (!load_model(InputFileName)) return false;
+		std::cout << "Load text MultiPerceptron model file finished." <<endl;
+		// FILE *str_file;
+		// FILE *bin_file;
+		// str_file = fopen(InputFileName.c_str(), "r");
+		// if(!str_file) {
+		// 	cerr << "\nMultiPerceptron ERROR" <<endl;
+		// 	cerr << "Cannot open the MultiPerceptron model file:" << InputFileName << endl;
+		// 	return false;
+		// }
+		// bin_file = fopen(OutputFileName.c_str(), "wb");
+		return save_bin_model(OutputFileName);
+
 	}
 
 	vector<string> MultiPerceptron::string_split(string terms_str, string spliting_tag)
