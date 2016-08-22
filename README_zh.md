@@ -67,6 +67,36 @@ OPTIONS:
 	    -p <prob>     -> Probability file (default: model\Prob)
 ```
 
+### 资源文件转化为二进制
+
+使用`convert`命令将模型和资源文件由文本文件格式转换为二进制格式：
+
+```shell
+NAME
+    convert -- convert model & src file of CWSP from text to binary file
+USAGE:
+    convert [-A] [-c][-dfpm file]
+OPTIONS:
+     -h    Print help infomation
+
+     -A    Convert all the model & src file with default path. Include:
+           CharType(./data/*), Feat(./model/Feat), Prob(./model/Prob), Dict
+           (./model/Dict) and Model(./model/Model). And also you can use
+           following command [-dfpm file] to give a specified file.
+
+     Following command can be used to convert a specified model file.
+     -c    Convert all the CharType files under './data/'
+
+     -d    Convert Dict file from the specified file(default: ./model/Dict)
+
+     -f    Convert Feat file from the specified file(default: ./model/Feat)
+
+     -p    Convert Prob file from the specified file(default: ./model/Prob)
+
+     -m    Convert MultiPerceptron Model file from the specified file(default:
+           ./model/Model)
+```
+
 ## 资源文件
 
 ### /data目录下
@@ -112,6 +142,7 @@ Feat和Prob文件是CWSP训练期间产生的模型文件。
 
 - 2016-08-22 版本 1.0.3
   - MultiPerceptron现在已经支持模型文件的二进制格式或文本格式读写。
+  - convert程序已经被重新编写过了，它现在有了一些新功能，在本页面中的**使用方法**章节中查看更多细节。
 - 2016-08-09 版本 1.0.2
   - 添加了两个用于语料文件格式转换的脚本。
 - 2016-04-19 版本 1.0.1
