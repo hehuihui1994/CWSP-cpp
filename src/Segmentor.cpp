@@ -80,7 +80,7 @@ namespace cwsp
             return false;
         }
 
-        if(!_mp->load_model(mpfile))
+        if(!_mp->read_model(mpfile))
         {
             cerr << "\nSegmentor ERROR" << endl;
             cerr << "Initialization failed!";
