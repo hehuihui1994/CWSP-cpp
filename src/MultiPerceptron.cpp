@@ -78,8 +78,8 @@ namespace cwsp
             return false;
         }
         char headBuf[UNIGRAM_LEN_MAX];
-        fread(&headBuf, g_Header_Len, 1, FeatureFile);
-        fclose(FeatureFile);
+        fread(&headBuf, g_Header_Len, 1, infile);
+        fclose(infile);
         string header = string(headBuf, g_Header_Len);
         if (header == g_Model_Header)
         {

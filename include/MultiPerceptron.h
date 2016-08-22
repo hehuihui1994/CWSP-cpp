@@ -11,6 +11,7 @@
 *********************************************************************/
 
 #pragma once
+#include "Config.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
