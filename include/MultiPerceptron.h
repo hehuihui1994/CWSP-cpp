@@ -50,10 +50,10 @@ namespace cwsp
         int score_to_class(vector<float> &score);
         float classify_testing_file(string testing_file, string output_file, int output_format);
         bool classify_samps_withprb(vector<vector<string> >featsVec, vector<vector<double> > &probs);
+        bool ConvertToBinaryFile(string InputFileName, string OutputFileName);
     private:
         bool load_bin_model(string model_file);
         bool load_model(string model_file);
-        bool ConvertToBinaryFile(string InputFileName, string OutputFileName);
         bool read_samp_file(string samp_file, vector<feature> &samp_feat_vec, vector<int> &samp_class_vec);
         bool read_samps_vec(vector<vector<string> >featsVec, vector<feature> &samp_feat_vec);
         void update_omega(int samp_class, feature &samp_feat, float learn_rate);
